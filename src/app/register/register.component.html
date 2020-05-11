@@ -1,16 +1,7 @@
 <div class="register-container">
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="employee-data" formGroupName="employee">
-      <mat-form-field>
-        <mat-label>Employee ID</mat-label>
-        <input
-          matInput
-          type="number"
-          placeholder="Employee ID"
-          formControlName="idEmployee" />
-      </mat-form-field>
-
-      <mat-form-field>
+         <mat-form-field>
         <mat-label>Name</mat-label>
         <input
           matInput
@@ -18,18 +9,10 @@
           placeholder="Name"
           formControlName="name"/>
       </mat-form-field>
+      
 
       <mat-form-field>
-        <mat-label>Email</mat-label>
-        <input
-          matInput
-          type="email"
-          placeholder="Hexaware email"
-          formControlName="email" />
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>Main Role</mat-label>
+        <mat-label>Dependents</mat-label>
         <input
           matInput
           type="text"
@@ -100,6 +83,15 @@
         {{ form.get('pwdData').getError('passwordsNotTheSame').message }}
       </mat-hint>
     </div>
+
+    <mat-form-field>
+      <mat-label> Mail </mat-label>
+      <input
+        matInput
+        type="email"
+        placeholder="Hexaware email"
+        formControlName="email" />
+    </mat-form-field>
 
     <button
       mat-raised-button
