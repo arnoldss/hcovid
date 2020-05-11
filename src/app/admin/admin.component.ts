@@ -30,7 +30,7 @@ export class AdminComponent implements OnInit {
 
   workLocations: WorkLocation[];
 
-  displayedColumns: string[] = [ 'name', 'city', 'country', 'mainRole', 'school', 'skills', 'projects', 'delete'];
+  displayedColumns: string[] = [ 'name', 'city', 'country'];
   dataSource;
   employees:Array<Employee> = [{
     docId: '',
