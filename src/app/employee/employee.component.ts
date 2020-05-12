@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EmployeeService } from './employee.service';
 import { Country } from '../shared/models/country.model';
 import { ActivatedRoute } from '@angular/router';
 import { Skill } from '../shared/models/skill.model';
-import { User } from 'firebase';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { switchMap, map, tap, take } from 'rxjs/operators';
 import { Employee } from './employee.model';
-import { isNullOrUndefined, parseFirestoreTimestamp } from '../shared/helper-functions';
+import { isNullOrUndefined } from '../shared/helper-functions';
 import { Study } from '../shared/models/study.model';
 import { Project } from '../shared/models/project.model';
 
@@ -24,8 +22,7 @@ export class EmployeeComponent implements OnInit {
   skillForm: FormGroup;
   projectForm: FormGroup;
 
-  constructor(private auth: AngularFireAuth,
-              private employeeService: EmployeeService,
+  constructor(private employeeService: EmployeeService,
               private fb: FormBuilder,
               private route: ActivatedRoute) { }
 
@@ -49,13 +46,7 @@ export class EmployeeComponent implements OnInit {
   }
 
   private _updateEmployee() {
-    this.auth.user.pipe(
-      take(1),
-      switchMap(user => {
-        const uid = user.uid;
-        return this.employeeService.updateEmployeeByUid(uid, this.employee);
-      })
-    ).subscribe(success => {}, error => console.error(error));
+
   }
 
   ngOnInit() {
