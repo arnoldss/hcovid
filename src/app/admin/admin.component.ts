@@ -54,27 +54,6 @@ export class AdminComponent implements OnInit {
   }]
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  employeeOriginal: Employee = {
-    email: '',
-    docId: '',
-    idEmployee: '',
-    livingCity: '',
-    livingCountry: '',
-    mainRole: '',
-    name: '',
-    projects: [],
-    lastStudy: {
-      countryCode: '',
-      institutionName: '',
-      studyName: '',
-      completionDate: ''
-    },
-    skills: [],
-    employeeUid: '',
-    workLocation: '',
-    authorUid: ''
-  };
-
   filterEmployee: Employee = {
     email: '',
     docId: '',
@@ -255,8 +234,6 @@ export class AdminComponent implements OnInit {
   }
 
   applyFilter(filter) {
-    // const filterValue = (event.target as HTMLInputElement).value;
-    // this.dataSource.filter = filterValue.trim().toLowerCase();
     this.globalFilter = filter;
     console.log(this.filterEmployee);
     this.dataSource.filter = JSON.stringify(this.filterEmployee);
