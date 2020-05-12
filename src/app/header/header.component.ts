@@ -9,7 +9,7 @@ import { UserAdminService } from '../shared/services/admin.service';
   styleUrls: ['header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  user: Observable<User>;
+  user;
   isAdmin = false;
 
   constructor(private router: Router,

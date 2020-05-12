@@ -110,13 +110,6 @@ export class AdminComponent implements OnInit {
     this.initFormGroups();
     this.countries = this.route.snapshot.data.countries;
     this.workLocations = this.route.snapshot.data.workLocations;
-    this.employeeServ.getEmployees().subscribe(employees => {
-      this.employees = employees;
-      console.log(this.employees);
-      this.dataSource = new MatTableDataSource<Employee>(this.employees);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.filterPredicate = this.customFilterPredicate();
-    });
 
 
     this.cityFilter.valueChanges.subscribe((positionFilterValue) => {
@@ -175,8 +168,7 @@ export class AdminComponent implements OnInit {
   }
 
   onEmployeeDelete(employee: Employee) {
-    this.employeeServ.deleteEmployee(employee.docId)
-      .then(success => { }, error => console.error(error));
+
   }
 
   onProjectDelete(index: number) {
@@ -202,8 +194,7 @@ export class AdminComponent implements OnInit {
   }
 
   private _updateEmployee() {
-    this.employeeServ.updateEmployeeByDocId(this.editEmployee.docId, this.editEmployee)
-      .then(success => { }, error => console.error(error));
+
   }
 
   getWorkLocations(countryCode: string): WorkLocation[] {

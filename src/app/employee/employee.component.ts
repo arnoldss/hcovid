@@ -53,19 +53,6 @@ export class EmployeeComponent implements OnInit {
     this._initForms();
     const routeSnapshot = this.route.snapshot;
     this.countries = routeSnapshot.data.countries;
-    this.employeeService.getLoggedUserEmployeeData().subscribe(
-      employee => {
-        const studyFormValue = employee.lastStudy != null ? {...employee.lastStudy} : {
-          countryCode: null,
-          institutionName: null,
-          studyName: null,
-          completionDate: null
-        };
-        this.studyForm.setValue(studyFormValue);
-        this.employee = employee;
-      },
-      error => console.error(error)
-    );
   }
 
   onAddSkill() {

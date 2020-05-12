@@ -23,10 +23,10 @@ export class LocationService {
   }
 
   getCountries() {
-
+    return [];
   }
 
   getWorkLocations() {
-
+    return [];
   }
 }
