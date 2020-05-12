@@ -6,7 +6,6 @@ import { EmployeeService } from '../employee/employee.service';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormValidators } from '../shared/form-validators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { WorkLocation } from '../shared/models/work-location.model';
 import { Country } from '../shared/models/country.model';
 import { Skill } from '../shared/models/skill.model';
@@ -81,8 +80,7 @@ export class AdminComponent implements OnInit {
   skillForm: FormGroup;
   projectForm: FormGroup;
 
-  constructor(private auth: AngularFireAuth,
-              private fb: FormBuilder,
+  constructor(private fb: FormBuilder,
               private employeeServ: EmployeeService,
               private route: ActivatedRoute,
               private router: Router) { }
@@ -91,13 +89,6 @@ export class AdminComponent implements OnInit {
     this.initFormGroups();
     this.countries = this.route.snapshot.data.countries;
     this.workLocations = this.route.snapshot.data.workLocations;
-    this.employeeServ.getEmployees().subscribe(employees => {
-      this.employees = employees;
-      console.log(this.employees);
-      this.dataSource = new MatTableDataSource<Employee>(this.employees);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.filterPredicate = this.customFilterPredicate();
-    });
 
 
     this.cityFilter.valueChanges.subscribe((positionFilterValue) => {
@@ -156,8 +147,7 @@ export class AdminComponent implements OnInit {
   }
 
   onEmployeeDelete(employee: Employee) {
-    this.employeeServ.deleteEmployee(employee.docId)
-      .then(success => { }, error => console.error(error));
+
   }
 
   onProjectDelete(index: number) {
@@ -183,8 +173,7 @@ export class AdminComponent implements OnInit {
   }
 
   private _updateEmployee() {
-    this.employeeServ.updateEmployeeByDocId(this.editEmployee.docId, this.editEmployee)
-      .then(success => { }, error => console.error(error));
+
   }
 
   getWorkLocations(countryCode: string): WorkLocation[] {
@@ -195,22 +184,6 @@ export class AdminComponent implements OnInit {
     const email = this.employeeFormGroup.get('email').value;
     const password = this.form.get('pwdData').get('password').value;
     const employee: Employee = this.employeeFormGroup.value;
-    this.auth.createUserWithEmailAndPassword(email, password)
-      .then(
-        onFulfilled => {
-          const employeeId = onFulfilled.user.uid;
-          this.employeeServ.createEmployee(employeeId, employee).subscribe(
-            docRef => {
-              this.selected = 1;
-              this.editEmployee = employee;
-              this.editEmployee.skills = [];
-              this.editEmployee.projects = [];
-            },
-            error => console.error(error)
-          );
-        },
-        onReject => console.error(onReject)
-      );
   }
 
   customFilterPredicate() {
