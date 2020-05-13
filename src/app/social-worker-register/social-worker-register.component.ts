@@ -18,6 +18,7 @@ export class SocialWorkerRegisterComponent implements OnInit {
       {
         firstname: [null, Validators.required],
         lastname: [null, Validators.required],
+        email: [null, [Validators.required, Validators.email]],
         password: [null, Validators.required],
         pwdConfirm: [null, Validators.required],
       },
