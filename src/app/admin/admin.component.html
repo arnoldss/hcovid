@@ -1,55 +1,56 @@
 <div class="flexContainer">
-
   <mat-form-field>
     <mat-label>Filtro</mat-label>
-    <input matInput (ngModelChange)="applyFilter($event)"
-     placeholder="Ejemplo: Arnoldo Bazaldua" [ngModel]="globalFilter">
+    <input
+      matInput
+      (ngModelChange)="applyFilter($event)"
+      placeholder="Ejemplo: Arnoldo Bazaldua"
+      [ngModel]="globalFilter"
+    />
   </mat-form-field>
 
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource">
-
       <ng-container matColumnDef="nombre">
-        <th mat-header-cell *matHeaderCellDef> Nombre
+        <th mat-header-cell *matHeaderCellDef>
+          Nombre
 
           <div>
             <mat-form-field>
-              <input matInput class="form-field" [formControl]="nameFilter"
-               placeholder="Filtro de Nombre">
+              <input
+                matInput
+                class="form-field"
+                [formControl]="nameFilter"
+                placeholder="Filtro de Nombre"
+              />
             </mat-form-field>
           </div>
-
         </th>
-        <td mat-cell *matCellDef="let element"> {{element.firstname}} </td>
+        <td mat-cell *matCellDef="let element">{{ element.firstname }}</td>
       </ng-container>
-
 
       <ng-container matColumnDef="apellido">
-        <th mat-header-cell *matHeaderCellDef> Apellido
-        </th>
-        <td mat-cell *matCellDef="let element"> {{element.maternalLastName}} </td>
+        <th mat-header-cell *matHeaderCellDef>Apellido</th>
+        <td mat-cell *matCellDef="let element">{{ element.maternalLastname }}</td>
       </ng-container>
 
-
       <ng-container matColumnDef="curp">
-        <th mat-header-cell *matHeaderCellDef> Curp
+        <th mat-header-cell *matHeaderCellDef>
+          Curp
 
           <div>
             <mat-form-field>
               <input matInput class="form-field" [formControl]="curpFilter" placeholder="Filtro de curp">
             </mat-form-field>
           </div>
-
-
         </th>
-        <td mat-cell *matCellDef="let element"> {{element.curp}} </td>
+        <td mat-cell *matCellDef="let element">{{ element.curp }}</td>
       </ng-container>
 
       <ng-container matColumnDef="estatus">
-        <th mat-header-cell *matHeaderCellDef> Estatus </th>
-        <td mat-cell *matCellDef="let element"> {{element.accepted}} </td>
+        <th mat-header-cell *matHeaderCellDef>Estatus</th>
+        <td mat-cell *matCellDef="let element">{{ element.accepted }}</td>
       </ng-container>
-
 
       <ng-container matColumnDef="delete">
         <th mat-header-cell *matHeaderCellDef>Delete</th>
@@ -58,74 +59,70 @@
             mat-raised-button
             color="primary"
             type="button"
-            (click)="onEmployeeDelete(element)">
+            (click)="onEmployeeDelete(element)"
+          >
             Delete
           </button>
         </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectEmployee(row)"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        (click)="selectEmployee(row)"
+      ></tr>
     </table>
 
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>
-
 </div>
 
-
 <div class="flexContainer">
-  <mat-tab-group class="groupTabs"
-  [selectedIndex]="selected"
-  >
+  <mat-tab-group class="groupTabs" [selectedIndex]="selected">
     <mat-tab label="Registrar Ciudadano">
       <app-citizen-register></app-citizen-register>
     </mat-tab>
 
-
-
     <mat-tab label="Editar">
-
-
       <div class="flexContainerAddDeep">
-
-  <div class="profile-container">
-
-  </div>
-
-
-
-
-
-
+        <div class="profile-container"></div>
       </div>
     </mat-tab>
 
-
- 
     <mat-tab label="Registrar Trabajador social">
-      
-      <div class="register-sw"> 
-      <form [formGroup]="formSocialWorker" (ngSubmit)="registerSocialWorker()">
-        <mat-form-field>
-          <mat-label>Username</mat-label>
-          <input matInput type="text" placeholder="Username" formControlName="username" />
-        </mat-form-field>
-    
-        <mat-form-field>
-          <mat-label>Password</mat-label>
-          <input matInput type="password" placeholder="Password" formControlName="password" />
-        </mat-form-field>
-    
-        <button mat-raised-button color="primary" type="submit" [disabled]="!formSocialWorker.valid">
-          Register
-        </button>
-  
-      </form>
-    </div>
+      <div class="register-sw">
+        <form [formGroup]="formSocialWorker" (ngSubmit)="registerSocialWorker()">
+          <mat-form-field>
+            <mat-label>Username</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Username"
+              formControlName="username"
+            />
+          </mat-form-field>
 
+          <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              type="password"
+              placeholder="Password"
+              formControlName="password"
+            />
+          </mat-form-field>
 
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!formSocialWorker.valid"
+          >
+            Register
+          </button>
+        </form>
+      </div>
     </mat-tab>
-
   </mat-tab-group>
 </div>
