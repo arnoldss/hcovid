@@ -4,18 +4,25 @@
   justify-content: center;
   height: 100%;
 
-  form {
-    width: 40%;
+  & > div {
+    text-align: center;
+    width: 50%;
 
-    mat-form-field, button {
-      width: 100%;
+    form {
+      margin: 20px 0;
+      padding: 0 15px;
+
+      mat-form-field,
+      button {
+        width: 100%;
+      }
     }
   }
 }
 
 @media (max-width: 425px) {
   .sign-in-container {
-    form {
+    & > div {
       width: 80%;
     }
   }

@@ -1,43 +1,47 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { SignInService } from './sign-in.service';
+import { FormValidators } from '../shared/form-validators';
 
 @Component({
   selector: 'app-sign-in',
   templateUrl: 'sign-in.component.html',
-  styleUrls: ['sign-in.component.scss']
+  styleUrls: ['sign-in.component.scss'],
 })
 export class SignInComponent implements OnInit {
-  form: FormGroup;
+  socialWorkerForm: FormGroup;
+  citizenStatusForm: FormGroup;
 
-  constructor(private fb: FormBuilder,
-              private router: Router,
-              private snackbar: MatSnackBar,
-              private signInService: SignInService,) { }
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private signInService: SignInService
+  ) {}
 
   ngOnInit() {
-    this.form = this.fb.group({
-      username: [null, Validators.required],
-      password: [null, Validators.required]
+    this.socialWorkerForm = this.fb.group({
+      email: [null, [Validators.required, Validators.email]],
+      password: [null, Validators.required],
+    });
+    this.citizenStatusForm = this.fb.group({
+      curp: [null, [Validators.required, Validators.pattern(FormValidators.CURP_REGEX)]],
     });
   }
 
-  signIn() {
-    const username = this.form.get('username').value;
-    const password = this.form.get('password').value;
-    const snackbarConfig: MatSnackBarConfig = { duration: 10000 };
-   this.signInService.authenticate(username, password).subscribe(
-    data => {
-      this.router.navigate(['/admin'])
+  onCitizenSubmit() {
+    const curp = this.citizenStatusForm.value.curp;
+    console.log(curp);
+  }
 
-    },
-    error => {
-
-    }
-  )
-
-
+  onSocialWorkerSubmit() {
+    const email = this.socialWorkerForm.get('email').value;
+    const password = this.socialWorkerForm.get('password').value;
+    this.signInService.authenticate(email, password).subscribe(
+      (data) => {
+        this.router.navigate(['/admin']);
+      },
+      (error) => {}
+    );
   }
 }
