@@ -220,9 +220,9 @@ export class CitizenRegisterComponent implements OnInit, OnDestroy {
       hasJob: value.hasJob === 'true',
       hasOtherSupport: value.hasOtherSupport === 'true',
       isSingle: value.isSingle === 'true',
-      maternalLastname: value.maternalLastname,
+      maternalLastName: value.maternalLastname,
       lastPaycheckQty: value.lastPaycheckQty,
-      paternalLastname: value.paternalLastname,
+      paternalLastName: value.paternalLastName,
     };
     console.log(citizen);
   }

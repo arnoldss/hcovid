@@ -18,7 +18,7 @@ export class AdminComponent implements OnInit {
   
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  cityFilter = new FormControl();
+  curpFilter = new FormControl();
   nameFilter = new FormControl();
   globalFilter = '';
   selected :number;
@@ -70,12 +70,12 @@ export class AdminComponent implements OnInit {
 
 
 
-this.cityFilter.valueChanges.subscribe((nameFilterValue) => {
+this.nameFilter.valueChanges.subscribe((nameFilterValue) => {
   this.filterCitizen['firstname'] = nameFilterValue;
   this.dataSource.filter = JSON.stringify(this.filterCitizen);
 });
 
-this.nameFilter.valueChanges.subscribe((curpFilterValue) => {
+this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
   this.filterCitizen['curp'] = curpFilterValue;
   this.dataSource.filter = JSON.stringify(this.filterCitizen);
 });
