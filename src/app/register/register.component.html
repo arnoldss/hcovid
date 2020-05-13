@@ -1,7 +1,48 @@
 <div class="register-container">
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <mat-label>Nombre(s)</mat-label>
+      <input matInput type="text" placeholder="Nombre" formControlName="firstname" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Apellido Paterno</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Apellido Paterno"
+        formControlName="paternalLastName"
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Apellido Materno</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Apellido Materno"
+        formControlName="maternalLastName"
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Fecha de Nacimiento</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="birthDate" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Estado de Nacimiento</mat-label>
+      <mat-select formControlName="birthStateId">
+        <mat-option *ngFor="let state of states" [value]="state.id">
+          {{ state.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <div class="radio-group">
-      <mat-label>¿El ciudadano cuenta con un empleo formal?</mat-label>
+      <mat-label>¿Cuenta con un empleo formal?</mat-label>
       <mat-radio-group formControlName="hasJob" (change)="onHasJobChange($event)">
         <mat-radio-button value="true">Si</mat-radio-button>
         <mat-radio-button value="false">No</mat-radio-button>
@@ -9,12 +50,12 @@
     </div>
 
     <mat-form-field *ngIf="form.get('hasJob').value === 'true'">
-      <mat-label>Ingrese la cantidad recibida en su último salario</mat-label>
+      <mat-label>Cantidad recibida en su último salario</mat-label>
       <input matInput type="number" placeholder="ḾXN" formControlName="lastPaycheckQty" />
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Ingrese la cantidad de personas que dependen del ciudadano</mat-label>
+      <mat-label>Cantidad de dependientes</mat-label>
       <input
         matInput
         type="number"

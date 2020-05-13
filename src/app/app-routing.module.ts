@@ -2,13 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { EmployeeComponent } from './employee/employee.component';
-import { RegisterComponent } from './register/register.component';
+import { CitizenRegisterComponent } from './register/register.component';
 import { CountryResolver } from './shared/resolvers/country.resolver';
 import { WorkLocationResolver } from './shared/resolvers/work-location.resolver';
 import { AdminComponent } from './admin/admin.component';
 import { AuthGuardService } from './shared/services/auth-guard.service';
-
-
 
 const routes: Routes = [
   { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
@@ -17,8 +15,8 @@ const routes: Routes = [
     component: AdminComponent,
     resolve: {
       countries: CountryResolver,
-      workLocations: WorkLocationResolver
-    }, 
+      workLocations: WorkLocationResolver,
+    },
     // canActivate:[AuthGuardService]
   },
   {
@@ -26,21 +24,17 @@ const routes: Routes = [
     component: EmployeeComponent,
     resolve: {
       countries: CountryResolver,
-      workLocations: WorkLocationResolver
+      workLocations: WorkLocationResolver,
     },
-   // canActivate:[AuthGuardService]
+    // canActivate:[AuthGuardService]
   },
-  {
-    path: 'register',
-    component: RegisterComponent,
-    resolve: { countries: CountryResolver, workLocations: WorkLocationResolver } },
-  { path: 'register', component: RegisterComponent },  // canActivate:[AuthGuardService]},
+  { path: 'citizen-register', component: CitizenRegisterComponent },
   { path: 'sign-in', component: SignInComponent },
-  { path: '**', redirectTo: '/sign-in' }
+  { path: '**', redirectTo: '/sign-in' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

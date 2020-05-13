@@ -2,35 +2,19 @@
   <form [formGroup]="form" (ngSubmit)="signIn()">
     <mat-form-field>
       <mat-label>Username</mat-label>
-      <input
-        matInput
-        type="text"
-        placeholder="Username"
-        formControlName="username" />
+      <input matInput type="text" placeholder="Username" formControlName="username" />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Password</mat-label>
-      <input
-        matInput
-        type="password"
-        placeholder="Password"
-        formControlName="password"/>
+      <input matInput type="password" placeholder="Password" formControlName="password" />
     </mat-form-field>
 
-    <button
-      mat-raised-button
-      color="primary"
-      type="submit"
-      [disabled]="!form.valid">
+    <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">
       Sign in
     </button>
 
-    <button
-      mat-button
-      color="primary"
-      type="button"
-      [routerLink]="['/register']">
+    <button mat-button color="primary" type="button" [routerLink]="['/citizen-register']">
       Register
     </button>
   </form>
