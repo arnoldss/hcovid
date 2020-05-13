@@ -32,21 +32,7 @@ export class AdminComponent implements OnInit {
     accepted: 1
   }]
 
-  filterEmployee: Citizen = {
-    birthDate: '';
-    birthStateId?: number;
-    dependantQty?: number;
-    firstname?: string;
-    govSupport?: GovernmentSupport[];
-    hasJob?: boolean;
-    curp?: string;
-    hasOtherSupport?: boolean;
-    isSingle?: boolean;
-    maternalLastName?: string;
-    lastPaycheckQty?: number;
-    paternalLastName?: string;
-    accepted?: number;
-  };
+  filterEmployee: Citizen = { };
 
   editEmployee: any;
   form: FormGroup;
