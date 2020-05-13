@@ -1,7 +1,7 @@
 <div class="flexContainer">
 
   <mat-form-field>
-    <mat-label>Filter</mat-label>
+    <mat-label>Filtro</mat-label>
     <input matInput (ngModelChange)="applyFilter($event)"
      placeholder="Ejemplo: Arnoldo Bazaldua" [ngModel]="globalFilter">
   </mat-form-field>
@@ -9,7 +9,7 @@
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource">
 
-      <ng-container matColumnDef="name">
+      <ng-container matColumnDef="nombre">
         <th mat-header-cell *matHeaderCellDef> Nombre
 
           <div>
@@ -20,10 +20,26 @@
           </div>
 
         </th>
-        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.firstname}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="city">
+
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef> Nombre
+
+          <div>
+            <mat-form-field>
+              <input matInput class="form-field" [formControl]="nameFilter"
+               placeholder="Filtro de Nombre">
+            </mat-form-field>
+          </div>
+
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.maternalLastName}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="curp">
         <th mat-header-cell *matHeaderCellDef> Curp
 
           <div>
@@ -34,12 +50,12 @@
 
 
         </th>
-        <td mat-cell *matCellDef="let element"> {{element.livingCity}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.curp}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="country">
+      <ng-container matColumnDef="estatus">
         <th mat-header-cell *matHeaderCellDef> Estatus </th>
-        <td mat-cell *matCellDef="let element"> {{element.livingCountry}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.accepted}} </td>
       </ng-container>
 
 
@@ -82,129 +98,9 @@
 
       <div class="flexContainerAddDeep">
 
-        <div class="profile-container">
+  <div class="profile-container">
 
-        <div class="skill-form">
-          <div class="form-container">
-            <h1>Skills</h1>
-            <form
-              [formGroup]="skillForm"
-              (ngSubmit)="onAddSkill()">
-              <mat-form-field>
-                <mat-label>Skill Name</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Skill Name"
-                  formControlName="name"
-                />
-              </mat-form-field>
-
-              <mat-form-field>
-                <mat-label>Skill Area</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Skill Area"
-                  formControlName="area"
-                />
-              </mat-form-field>
-
-              <button
-                mat-raised-button
-                color="primary"
-                type="submit"
-                [disabled]="!skillForm.valid">
-                Add Skill
-              </button>
-            </form>
-          </div>
-          <div class="skills-container">
-            <mat-card *ngFor="let skill of editEmployee?.skills; let i = index">
-              <mat-card-header>
-                <mat-card-title>{{ skill.name }}</mat-card-title>
-                <mat-card-subtitle>{{ skill.area }}</mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-actions>
-                <button mat-button (click)="onSkillDelete(i)">Delete</button>
-              </mat-card-actions>
-            </mat-card>
-          </div>
-        </div>
-
-
-        <div class="project-form">
-          <div class="form-container">
-            <h1>Projects</h1>
-            <form [formGroup]="projectForm" (ngSubmit)="onProjectSubmit()">
-              <mat-form-field>
-                <mat-label>Customer</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Customer Name"
-                  formControlName="customer"
-                />
-              </mat-form-field>
-
-              <mat-form-field>
-                <mat-label>Initial Date</mat-label>
-                <input
-                  disabled
-                  matInput
-                  [matDatepicker]="initDatePicker"
-                  formControlName="initialDate">
-                <mat-datepicker-toggle matSuffix [for]="initDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #initDatePicker disabled="false" touchUi="true"></mat-datepicker>
-              </mat-form-field>
-
-              <mat-form-field>
-                <mat-label>Completion Date</mat-label>
-                <input
-                  disabled
-                  matInput
-                  [matDatepicker]="completionDatePicker"
-                  formControlName="completionDate">
-                <mat-datepicker-toggle matSuffix [for]="completionDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #completionDatePicker disabled="false" touchUi="true"></mat-datepicker>
-              </mat-form-field>
-
-              <mat-form-field>
-                <mat-label>Role</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Role"
-                  formControlName="role"
-                />
-              </mat-form-field>
-
-              <button
-                mat-raised-button
-                color="primary"
-                type="submit"
-                [disabled]="!projectForm.valid">
-                Add Project
-              </button>
-            </form>
-          </div>
-          <div class="projects-container">
-            <mat-card *ngFor="let project of editEmployee?.projects; let i = index">
-              <mat-card-header>
-                <mat-card-title>{{ project.customer }}</mat-card-title>
-                <mat-card-subtitle>
-                  {{ (project.initialDate | date:'mediumDate') + ' | ' + (project.completionDate | date:'mediumDate') }}
-                </mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-actions>
-                <button mat-button (click)="onProjectDelete(i)">Delete</button>
-              </mat-card-actions>
-            </mat-card>
-          </div>
-        </div>
-
-
-      </div>
+  </div>
 
 
 
