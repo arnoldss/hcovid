@@ -50,7 +50,10 @@ export class AdminComponent implements OnInit {
     },
   ];
 
-  filterCitizen: Citizen = {};
+  filterCitizen: Citizen = {
+    firstname: '',
+    curp: ''
+  };
 
   editEmployee: any;
   formSocialWorker: FormGroup;
@@ -126,6 +129,7 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
 
   applyFilter(filter) {
     this.globalFilter = filter;
+    console.log(this.filterCitizen)
     this.dataSource.filter = JSON.stringify(this.filterCitizen);
   }
 
