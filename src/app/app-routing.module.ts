@@ -11,7 +11,7 @@ const routes: Routes = [
     path: 'admin',
     component: AdminComponent,
   },
-  { path: 'citizen-register', component: CitizenRegisterComponent },
+  { path: 'citizen-register', component: CitizenRegisterComponent,  },
   { path: 'social-worker-register', component: SocialWorkerRegisterComponent },
   { path: 'sign-in', component: SignInComponent },
   { path: '**', redirectTo: '/sign-in' },
