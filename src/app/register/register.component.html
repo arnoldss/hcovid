@@ -2,7 +2,7 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="radio-group">
       <mat-label>¿El ciudadano cuenta con un empleo formal?</mat-label>
-      <mat-radio-group formControlName="hasJob">
+      <mat-radio-group formControlName="hasJob" (change)="onHasJobChange($event)">
         <mat-radio-button value="true">Si</mat-radio-button>
         <mat-radio-button value="false">No</mat-radio-button>
       </mat-radio-group>
@@ -10,11 +10,7 @@
 
     <mat-form-field *ngIf="form.get('hasJob').value === 'true'">
       <mat-label>Ingrese la cantidad recibida en su último salario</mat-label>
-      <input
-        matInput
-        type="number"
-        placeholder="ḾXN"
-        formControlName="lastPaycheckQty"/>
+      <input matInput type="number" placeholder="ḾXN" formControlName="lastPaycheckQty" />
     </mat-form-field>
 
     <mat-form-field>
@@ -23,7 +19,8 @@
         matInput
         type="number"
         placeholder="Dependientes"
-        formControlName="dependantQty"/>
+        formControlName="dependantQty"
+      />
     </mat-form-field>
 
     <div class="radio-group">
@@ -36,7 +33,10 @@
 
     <div class="radio-group">
       <mat-label>¿El ciudadano cuenta con otro tipo de apoyo gubernamental?</mat-label>
-      <mat-radio-group formControlName="hasOtherSupport" (change)="onHasOtherSupportChange($event)">
+      <mat-radio-group
+        formControlName="hasOtherSupport"
+        (change)="onHasOtherSupportChange($event)"
+      >
         <mat-radio-button value="true">Si</mat-radio-button>
         <mat-radio-button value="false">No</mat-radio-button>
       </mat-radio-group>
@@ -50,7 +50,8 @@
             <mat-select formControlName="supportType">
               <mat-option
                 *ngFor="let supportType of govSupportOptions"
-                [value]="supportType.value">
+                [value]="supportType.value"
+              >
                 {{ supportType.label }}
               </mat-option>
               <mat-option value="other">Otro</mat-option>
@@ -63,7 +64,8 @@
               matInput
               type="text"
               placeholder="Nombre del apoyo"
-              formControlName="otherSupportName">
+              formControlName="otherSupportName"
+            />
           </mat-form-field>
         </div>
         <button
@@ -71,7 +73,8 @@
           (click)="deleteSupport(i)"
           class="delete-support-btn"
           color="primary"
-          type="button">
+          type="button"
+        >
           Eliminar apoyo -
         </button>
       </ng-container>
@@ -81,24 +84,17 @@
         [disabled]="!getGovSupportArray().valid"
         (click)="pushGovSupportForm()"
         color="primary"
-        type="button">
+        type="button"
+      >
         Añadir otro apoyo +
       </button>
     </ng-container>
 
-    <button
-      mat-raised-button
-      color="primary"
-      type="submit"
-      [disabled]="!form.valid">
+    <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">
       Registrar
     </button>
 
-    <button
-      mat-button
-      color="primary"
-      type="button"
-      [routerLink]="['/sign-in']">
+    <button mat-button color="primary" type="button" [routerLink]="['/sign-in']">
       Volver
     </button>
   </form>

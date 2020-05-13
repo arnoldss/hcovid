@@ -1,7 +1,10 @@
+import { GovernmentSupport } from './gov-support.model';
+
 export interface Citizen {
-  hasJob: boolean;
-  lastPaycheckQty: number;
   dependantQty: number;
-  isSingle: number;
+  govSupport: GovernmentSupport[];
+  hasJob: boolean;
   hasOtherSupport: boolean;
+  isSingle: boolean;
+  lastPaycheckQty: number;
 }
