@@ -6,6 +6,7 @@ import { FormValidators } from '../shared/form-validators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take, map } from 'rxjs/operators';
 import { ThrowStmt } from '@angular/compiler';
+import { Citizen } from '../shared/models/citizen.model';
 
 @Component({
   selector: 'app-admin',
@@ -14,55 +15,24 @@ import { ThrowStmt } from '@angular/compiler';
 })
 export class AdminComponent implements OnInit {
 
+  
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+
   cityFilter = new FormControl();
   nameFilter = new FormControl();
   globalFilter = '';
   selected :number;
 
-  displayedColumns: string[] = [ 'name', 'city', 'country'];
+  displayedColumns: string[] = [ 'nombre', 'curp', 'estatus'];
   dataSource;
-  employees:Array<any> = [{
-    docId: '',
-    email: '',
-    idEmployee: '',
-    livingCity: '',
-    livingCountry: '',
-    mainRole: '',
-    name: '',
-    projects: [],
-    lastStudy: {
-      countryCode: '',
-      institutionName: '',
-      studyName: '',
-      completionDate: ''
-    },
-    skills: [],
-    employeeUid: '',
-    workLocation: '',
-    authorUid: ''
+  citizens:Array<Citizen> = [{
+    firstname: '',
+    maternalLastName: '',
+    curp: '',
+    accepted: 1
   }]
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  filterEmployee: any = {
-    email: '',
-    docId: '',
-    idEmployee: '',
-    livingCity: '',
-    livingCountry: '',
-    mainRole: '',
-    name: '',
-    projects: [],
-    lastStudy: {
-      countryCode: '',
-      institutionName: '',
-      studyName: '',
-      completionDate: ''
-    },
-    skills: [],
-    employeeUid: '',
-    workLocation: '',
-    authorUid: ''
-  };
+  filterEmployee: Citizen = { };
 
   editEmployee: any;
   form: FormGroup;
@@ -71,6 +41,7 @@ export class AdminComponent implements OnInit {
   projectForm: FormGroup;
   countries: any;
   workLocations: any;
+  formSocialWorker: FormGroup;
 
   constructor(private fb: FormBuilder,
               private route: ActivatedRoute,
@@ -78,104 +49,19 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     this.initFormGroups();
-    this.countries = this.route.snapshot.data.countries;
-    this.workLocations = this.route.snapshot.data.workLocations;
-
-
-    this.cityFilter.valueChanges.subscribe((positionFilterValue) => {
-      this.filterEmployee['livingCity'] = positionFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filterEmployee);
-    });
-
-    this.nameFilter.valueChanges.subscribe((nameFilterValue) => {
-      this.filterEmployee['name'] = nameFilterValue;
-      this.dataSource.filter = JSON.stringify(this.filterEmployee);
-    });
-  }
-
-  change(tab) {
-    console.log(tab);
   }
 
   private initFormGroups() {
-    this.form = this.fb.group({
-      employee: this.fb.group({
-        idEmployee: [null, [Validators.required]],
-        email: [null, [Validators.required, Validators.email]],
-        livingCity: [null, [Validators.required]],
-        livingCountry: [null, [Validators.required]],
-        mainRole: [null, [Validators.required]],
-        name: [null, [Validators.required]],
-        workLocation: [null, [Validators.required]],
-      }),
-      pwdData: this.fb.group({
-        password: [null, [Validators.required, Validators.minLength(6)]],
-        pwdConfirm: [null, [Validators.required]]
-      }, { validators: [FormValidators.confirmPassword] })
+     this.formSocialWorker = this.fb.group({
+      username: [null, Validators.required],
+      password: [null, Validators.required]
     });
-    this.employeeFormGroup = this.form.get('employee') as FormGroup;
-    this.employeeFormGroup.get('livingCountry').valueChanges.subscribe(
-      (value: string) => this.employeeFormGroup.get('workLocation').reset()
-    );
-    this.skillForm = this.fb.group({
-      name: [null, Validators.required],
-      area: [null, Validators.required]
-    });
-    this.projectForm = this.fb.group({
-      customer: [null, Validators.required],
-      initialDate: [null, Validators.required],
-      completionDate: [null, Validators.required],
-      role: [null, Validators.required]
-    });
+
+
+ 
   }
 
-  onAddSkill() {
-  //  // const newSkill: Skill = this.skillForm.value;
-  //   const skills = [...this.editEmployee.skills];
-  //   skills.push(newSkill);
-  //   this.editEmployee.skills = skills;
-  //   this._updateEmployee();
-  }
-
-  onEmployeeDelete(employee: any) {
-
-  }
-
-  onProjectDelete(index: number) {
-    const projects = [...this.editEmployee.projects];
-    projects.splice(index, 1);
-    this.editEmployee.projects = projects;
-    this._updateEmployee();
-  }
-
-  onProjectSubmit() {
-    // const newProject: Project = this.projectForm.value;
-    // const projects = [...this.editEmployee.projects];
-    // projects.push(newProject);
-    // this.editEmployee.projects = projects;
-    // this._updateEmployee();
-  }
-
-  onSkillDelete(index: number) {
-    const skills = [...this.editEmployee.skills];
-    skills.splice(index, 1);
-    this.editEmployee.skills = skills;
-    this._updateEmployee();
-  }
-
-  private _updateEmployee() {
-
-  }
-
-   getWorkLocations(countryCode: string): any[] {
-      return [];
-   }
-
-  onSubmit() {
-    const email = this.employeeFormGroup.get('email').value;
-    const password = this.form.get('pwdData').get('password').value;
-    const employee: any = this.employeeFormGroup.value;
-  }
+  //// stuff for filtering
 
   customFilterPredicate() {
     const myFilterPredicate = (data: any, filter: string): boolean => {
@@ -203,9 +89,56 @@ export class AdminComponent implements OnInit {
     this.dataSource.filter = JSON.stringify(this.filterEmployee);
   }
 
-  selectEmployee(employee) {
-    this.editEmployee = employee;
-    this.skillForm.reset();
-    this.projectForm.reset();
+
+
+/////// stuff for adding 
+
+  registerSocialWorker() {
+    const email = this.employeeFormGroup.get('email').value;
+    const password = this.form.get('pwdData').get('password').value;
+    const employee: any = this.employeeFormGroup.value;
   }
+
+/////// stuff for edit
+
+selectEmployee(employee) {
+  this.editEmployee = employee;
+  this.skillForm.reset();
+  this.projectForm.reset();
+}
+
+
+
+
+onEmployeeDelete(employee: any) {
+
+}
+
+onProjectDelete(index: number) {
+  const projects = [...this.editEmployee.projects];
+  projects.splice(index, 1);
+  this.editEmployee.projects = projects;
+  this._updateCiudadano();
+}
+
+onProjectSubmit() {
+  // const newProject: Project = this.projectForm.value;
+  // const projects = [...this.editEmployee.projects];
+  // projects.push(newProject);
+  // this.editEmployee.projects = projects;
+  // this._updateEmployee();
+}
+
+onSkillDelete(index: number) {
+  const skills = [...this.editEmployee.skills];
+  skills.splice(index, 1);
+  this.editEmployee.skills = skills;
+  this._updateCiudadano();
+}
+
+private _updateCiudadano() {
+  // this.admin.updateCiudadano(this.editEmployee.docId, this.editEmployee)
+  //   .then(success => { }, error => console.error(error));
+}
+
 }

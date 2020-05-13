@@ -166,3 +166,20 @@
   .groupTabs {
     min-height: 800px;
   }
+
+
+  .register-sw {
+    margin-top: 100px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  //  height: 100%;
+  
+    form {
+      width: 40%;
+  
+      mat-form-field, button {
+        width: 100%;
+      }
+    }
+  }
