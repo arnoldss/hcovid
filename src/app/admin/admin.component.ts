@@ -71,6 +71,7 @@ export class AdminComponent implements OnInit {
   projectForm: FormGroup;
   countries: any;
   workLocations: any;
+  formSocialWorker: FormGroup;
 
   constructor(private fb: FormBuilder,
               private route: ActivatedRoute,
@@ -113,6 +114,13 @@ export class AdminComponent implements OnInit {
         pwdConfirm: [null, [Validators.required]]
       }, { validators: [FormValidators.confirmPassword] })
     });
+
+    this.formSocialWorker = this.fb.group({
+      username: [null, Validators.required],
+      password: [null, Validators.required]
+    });
+
+
     this.employeeFormGroup = this.form.get('employee') as FormGroup;
     this.employeeFormGroup.get('livingCountry').valueChanges.subscribe(
       (value: string) => this.employeeFormGroup.get('workLocation').reset()
@@ -207,5 +215,10 @@ export class AdminComponent implements OnInit {
     this.editEmployee = employee;
     this.skillForm.reset();
     this.projectForm.reset();
+  }
+
+
+  registerSocialWorker() {
+
   }
 }

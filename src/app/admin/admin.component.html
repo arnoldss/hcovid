@@ -3,16 +3,11 @@
   <mat-form-field>
     <mat-label>Filter</mat-label>
     <input matInput (ngModelChange)="applyFilter($event)"
-     placeholder="Ex. Angular" [ngModel]="globalFilter">
+     placeholder="Ejemplo: Arnoldo Bazaldua" [ngModel]="globalFilter">
   </mat-form-field>
 
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource">
-
-      <ng-container matColumnDef="idEmployee">
-        <th mat-header-cell *matHeaderCellDef> idEmployee. </th>
-        <td mat-cell *matCellDef="let element"> {{element.idEmployee}} </td>
-      </ng-container>
 
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef> Nombre
@@ -76,133 +71,13 @@
   [selectedIndex]="selected"
                (selectedIndexChange)="change($event)"
   >
-    <mat-tab label="Add">
+    <mat-tab label="Registrar Ciudadano">
       <app-citizen-register></app-citizen-register>
-      <!-- <div class="flexContainerAddDeep">
-
-        <div class="register-container">
-
-          <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <div class="employee-data" formGroupName="employee">
-              <mat-form-field>
-                <mat-label>Employee ID</mat-label>
-                <input
-                  matInput
-                  type="number"
-                  placeholder="Employee ID"
-                  formControlName="idEmployee" />
-              </mat-form-field>
-
-              <mat-form-field>
-                <mat-label>Name</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Name"
-                  formControlName="name"/>
-              </mat-form-field>
-
-              <mat-form-field>
-                <mat-label>Email</mat-label>
-                <input
-                  matInput
-                  type="email"
-                  placeholder="Hexaware email"
-                  formControlName="email" />
-              </mat-form-field>
-
-              <mat-form-field>
-                <mat-label>Main Role</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="Main Role"
-                  formControlName="mainRole"/>
-              </mat-form-field>
-
-              <mat-form-field>
-                <mat-label>Country</mat-label>
-                <mat-select formControlName="livingCountry">
-                  <mat-option [value]="null">Select an option</mat-option>
-                  <mat-option
-                    *ngFor="let country of countries"
-                    [value]="country.code">
-                    {{ country.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <mat-form-field *ngIf="employeeFormGroup.get('livingCountry').valid">
-                <mat-label>Work Location</mat-label>
-                <mat-select formControlName="workLocation">
-                  <mat-option [value]="null">Select an option</mat-option>
-                  <mat-option
-                    *ngFor="let location of getWorkLocations(employeeFormGroup.get('livingCountry').value)"
-                    [value]="location.code">
-                    {{ location.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <mat-form-field>
-                <mat-label>City</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  placeholder="City"
-                  formControlName="livingCity"/>
-              </mat-form-field>
-            </div>
-
-            <div class="pwd-data" formGroupName="pwdData">
-              <mat-form-field>
-                <mat-label>Password</mat-label>
-                <input
-                  matInput
-                  type="password"
-                  placeholder="Password"
-                  formControlName="password" />
-              </mat-form-field>
-
-              <mat-hint
-                *ngIf="form.get('pwdData').get('password').hasError('minlength')">
-                {{ 'Password must be at least 6 characters long' }}
-              </mat-hint>
-
-              <mat-form-field>
-                <mat-label>Confirm Password</mat-label>
-                <input
-                  matInput
-                  type="password"
-                  placeholder="Confirm password"
-                  formControlName="pwdConfirm" />
-              </mat-form-field>
-
-              <mat-hint
-                *ngIf="form.get('pwdData').hasError('passwordsNotTheSame')">
-                {{ form.get('pwdData').getError('passwordsNotTheSame').message }}
-              </mat-hint>
-            </div>
-
-            <button
-              mat-raised-button
-              color="primary"
-              type="submit"
-              [disabled]="!form.valid">
-              Register
-            </button>
-
-
-          </form>
-
-
-      </div>
-      </div>   -->
     </mat-tab>
 
 
 
-    <mat-tab label="Edit">
+    <mat-tab label="Editar">
 
 
       <div class="flexContainerAddDeep">
@@ -338,5 +213,32 @@
 
       </div>
     </mat-tab>
+
+
+ 
+    <mat-tab label="Registrar Trabajador social">
+      
+      <div class="register-sw"> 
+      <form [formGroup]="formSocialWorker" (ngSubmit)="registerSocialWorker()">
+        <mat-form-field>
+          <mat-label>Username</mat-label>
+          <input matInput type="text" placeholder="Username" formControlName="username" />
+        </mat-form-field>
+    
+        <mat-form-field>
+          <mat-label>Password</mat-label>
+          <input matInput type="password" placeholder="Password" formControlName="password" />
+        </mat-form-field>
+    
+        <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">
+          Register
+        </button>
+  
+      </form>
+    </div>
+
+
+    </mat-tab>
+
   </mat-tab-group>
 </div>
