@@ -1,63 +1,95 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Country } from '../shared/models/country.model';
-import { WorkLocation } from '../shared/models/work-location.model';
-import { FormValidators } from '../shared/form-validators';
-import { Employee } from '../employee/employee.model';
-import { EmployeeService } from '../employee/employee.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormArray, ValidationErrors } from '@angular/forms';
+import { Citizen } from '../shared/models/citizen.model';
+import { MatRadioChange } from '@angular/material/radio';
 
 @Component({
   selector: 'app-register',
   templateUrl: 'register.component.html',
   styleUrls: ['register.component.scss']
 })
-export class RegisterComponent implements OnInit {
-  countries: Country[];
+export class RegisterComponent implements OnInit, OnDestroy {
   form: FormGroup;
-  employeeFormGroup: FormGroup;
-  workLocations: WorkLocation[];
+  govSupportOptions = [
+    { value: 'groceries', label: 'Despensa' },
+    { value: 'rent', label: 'Renta' }
+  ];
 
-  constructor(private fb: FormBuilder,
-              private employeeServ: EmployeeService,
-              private route: ActivatedRoute,
-              private router: Router) { }
+  constructor(private fb: FormBuilder) { }
 
-  private initFormGroups() {
-    this.form = this.fb.group({
-      employee: this.fb.group({
-        idEmployee: [null, [Validators.required]],
-        email: [null, [Validators.required, Validators.email]],
-        livingCity: [null, [Validators.required]],
-        livingCountry: [null, [Validators.required]],
-        mainRole: [null, [Validators.required]],
-        name: [null, [Validators.required]],
-        workLocation: [null, [Validators.required]],
-      }),
-      pwdData: this.fb.group({
-        password: [null, [Validators.required, Validators.minLength(6)]],
-        pwdConfirm: [null, [Validators.required]]
-      }, { validators: [FormValidators.confirmPassword] })
-    });
-    this.employeeFormGroup = this.form.get('employee') as FormGroup;
-    this.employeeFormGroup.get('livingCountry').valueChanges.subscribe(
-      (value: string) => this.employeeFormGroup.get('workLocation').reset()
+  private _emptyGovSupportArray() {
+    this.getGovSupportArray().controls.forEach(
+      control => this.getGovSupportArray().removeAt(0)
     );
   }
 
   ngOnInit() {
-    this.initFormGroups();
-    this.countries = this.route.snapshot.data.countries;
-    this.workLocations = this.route.snapshot.data.workLocations;
+    this.form = this.fb.group({
+      hasJob: [null, Validators.required],
+      lastPaycheckQty: [null],
+      dependantQty: [null, Validators.required],
+      isSingle: [null, Validators.required],
+      hasOtherSupport: [null, Validators.required],
+      govSupport: this.fb.array([])
+    }, { validators: [this.requiredPaycheckQty]});
   }
 
-  getWorkLocations(countryCode: string): WorkLocation[] {
-    return this.workLocations.filter(location => location.countryCode === countryCode);
+  ngOnDestroy() {
+    this.form.reset();
+  }
+
+  deleteSupport(index: number) {
+    this.getGovSupportArray().removeAt(index);
+    if (this.getGovSupportArray().length <= 0) {
+      this.form.get('hasOtherSupport').setValue('false');
+    }
+  }
+
+  getGovSupportArray(): FormArray {
+    return this.form.get('govSupport') as FormArray;
+  }
+
+  onHasOtherSupportChange(event: MatRadioChange) {
+    const hasOtherSupport = event.value === 'true';
+    if (hasOtherSupport) {
+      this.pushGovSupportForm();
+    } else {
+      this._emptyGovSupportArray();
+    }
   }
 
   onSubmit() {
-    const email = this.employeeFormGroup.get('email').value;
-    const password = this.form.get('pwdData').get('password').value;
-    const employee: Employee = this.employeeFormGroup.value;
+    // const citizen: Citizen = this.form.value;
+    console.log(this.form.value);
+  }
+
+  pushGovSupportForm() {
+    const form = this.fb.group({
+      supportType: [null, Validators.required],
+      otherSupportName: [null]
+    }, { validators: [this.requiredOtherSupportName] });
+    this.getGovSupportArray().push(form);
+  }
+
+  requiredOtherSupportName(form: FormGroup): ValidationErrors {
+    const isOtherSupport = form.get('supportType').value === 'other';
+    const otherSupportName = form.get('otherSupportName').value;
+    if (isOtherSupport) {
+      const isNullOrEmpty = otherSupportName == null || otherSupportName === '';
+      return isNullOrEmpty ? { requiredOtherSupportName: true } : null;
+    } else {
+      return null;
+    }
+  }
+
+  requiredPaycheckQty(form: FormGroup): ValidationErrors {
+    const hasJob = form.get('hasJob').value === 'true';
+    const lastPaycheckQty = form.get('lastPaycheckQty').value;
+    if (hasJob) {
+      const isNullOrEmpty = lastPaycheckQty == null || lastPaycheckQty === '';
+      return isNullOrEmpty ? { requiredPaycheckQty: true } : null;
+    } else {
+      return null;
+    }
   }
 }

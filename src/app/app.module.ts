@@ -21,6 +21,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { AdminComponent } from './admin/admin.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatRadioModule } from '@angular/material/radio';
 
 
 
@@ -50,7 +51,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatTabsModule,
     MatCardModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent]

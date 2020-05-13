@@ -8,6 +8,10 @@
   form {
     width: 40%;
 
+    button[type=submit] {
+      margin-top: 17.5px;
+    }
+
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         /* display: none; <- Crashes Chrome on hover */
@@ -26,6 +30,27 @@
     mat-hint {
       display: block;
       margin-bottom: 20px;
+    }
+
+    .delete-support-btn {
+      margin-bottom: 17.5px;
+    }
+
+    .radio-group {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 17.5px;
+
+      mat-label {
+        width: 50%;
+      }
+
+      mat-radio-group {
+        align-items: center;
+        display: flex;
+        justify-content: space-evenly;
+        width: 50%;
+      }
     }
   }
 }
