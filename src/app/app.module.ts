@@ -20,7 +20,7 @@ import { AdminComponent } from './admin/admin.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { CitizenRegisterComponent } from './register/register.component';
+import { CitizenRegisterComponent } from './register/citizen-register.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 
 @NgModule({

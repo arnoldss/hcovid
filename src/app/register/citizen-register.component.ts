@@ -10,9 +10,9 @@ import { MatRadioChange } from '@angular/material/radio';
 import { Citizen } from '../shared/models/citizen.model';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: 'register.component.html',
-  styleUrls: ['register.component.scss'],
+  selector: 'app-citizen-register',
+  templateUrl: 'citizen-register.component.html',
+  styleUrls: ['citizen-register.component.scss'],
 })
 export class CitizenRegisterComponent implements OnInit, OnDestroy {
   form: FormGroup;
