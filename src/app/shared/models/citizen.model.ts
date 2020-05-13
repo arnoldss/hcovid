@@ -10,8 +10,8 @@ export interface Citizen {
   curp?: string;
   hasOtherSupport?: boolean;
   isSingle?: boolean;
-  maternalLastName?: string;
+  maternalLastname?: string;
   lastPaycheckQty?: number;
-  paternalLastName?: string;
+  paternalLastname?: string;
   accepted?: number;
 }
