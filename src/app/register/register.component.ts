@@ -1,37 +1,46 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray, ValidationErrors } from '@angular/forms';
-import { Citizen } from '../shared/models/citizen.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { MatRadioChange } from '@angular/material/radio';
+import { Citizen } from '../shared/models/citizen.model';
 
 @Component({
   selector: 'app-register',
   templateUrl: 'register.component.html',
-  styleUrls: ['register.component.scss']
+  styleUrls: ['register.component.scss'],
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   form: FormGroup;
   govSupportOptions = [
     { value: 'groceries', label: 'Despensa' },
-    { value: 'rent', label: 'Renta' }
+    { value: 'rent', label: 'Renta' },
   ];
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {}
 
   private _emptyGovSupportArray() {
-    this.getGovSupportArray().controls.forEach(
-      control => this.getGovSupportArray().removeAt(0)
+    this.getGovSupportArray().controls.forEach((control) =>
+      this.getGovSupportArray().removeAt(0)
     );
   }
 
   ngOnInit() {
-    this.form = this.fb.group({
-      hasJob: [null, Validators.required],
-      lastPaycheckQty: [null],
-      dependantQty: [null, Validators.required],
-      isSingle: [null, Validators.required],
-      hasOtherSupport: [null, Validators.required],
-      govSupport: this.fb.array([])
-    }, { validators: [this.requiredPaycheckQty]});
+    this.form = this.fb.group(
+      {
+        hasJob: [null, Validators.required],
+        lastPaycheckQty: [null],
+        dependantQty: [null, Validators.required],
+        isSingle: [null, Validators.required],
+        hasOtherSupport: [null, Validators.required],
+        govSupport: this.fb.array([]),
+      },
+      { validators: [this.requiredPaycheckQty] }
+    );
   }
 
   ngOnDestroy() {
@@ -49,6 +58,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
     return this.form.get('govSupport') as FormArray;
   }
 
+  onHasJobChange(event: MatRadioChange) {
+    const hasJob = event.value === 'true';
+    if (!hasJob) {
+      this.form.get('lastPaycheckQty').reset();
+    }
+  }
+
   onHasOtherSupportChange(event: MatRadioChange) {
     const hasOtherSupport = event.value === 'true';
     if (hasOtherSupport) {
@@ -59,15 +75,26 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    // const citizen: Citizen = this.form.value;
-    console.log(this.form.value);
+    const value = this.form.value;
+    const citizen: Citizen = {
+      dependantQty: value.dependantQty,
+      govSupport: value.govSupport,
+      hasJob: value.hasJob === 'true',
+      hasOtherSupport: value.hasOtherSupport === 'true',
+      isSingle: value.isSingle === 'true',
+      lastPaycheckQty: value.lastPaycheckQty,
+    };
+    console.log(citizen);
   }
 
   pushGovSupportForm() {
-    const form = this.fb.group({
-      supportType: [null, Validators.required],
-      otherSupportName: [null]
-    }, { validators: [this.requiredOtherSupportName] });
+    const form = this.fb.group(
+      {
+        supportType: [null, Validators.required],
+        otherSupportName: [null],
+      },
+      { validators: [this.requiredOtherSupportName] }
+    );
     this.getGovSupportArray().push(form);
   }
 
