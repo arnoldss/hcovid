@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -18,7 +19,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AdminComponent } from './admin/admin.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { EmployeeComponent } from './employee/employee.component';
 import { HeaderComponent } from './header/header.component';
 import { CitizenRegisterComponent } from './register/register.component';
 import { SignInComponent } from './sign-in/sign-in.component';
@@ -26,7 +26,6 @@ import { SignInComponent } from './sign-in/sign-in.component';
 @NgModule({
   declarations: [
     AppComponent,
-    EmployeeComponent,
     HeaderComponent,
     CitizenRegisterComponent,
     SignInComponent,
@@ -35,6 +34,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
   imports: [
     AppRoutingModule,
     BrowserModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
     MatAutocompleteModule,
@@ -52,7 +52,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
     MatPaginatorModule,
     MatRadioModule,
   ],
-  providers: [],
+  providers: [HttpClientModule],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
