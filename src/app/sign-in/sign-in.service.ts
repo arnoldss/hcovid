@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+
 
 export class User{
   constructor(
@@ -21,16 +23,20 @@ export class JwtResponse{
 })
 export class SignInService {
 
+  private API_URL= environment.API_URL;
+
+
   constructor(
     private httpClient:HttpClient
   ) { 
      }
 
      authenticate(username, password) {
-      return this.httpClient.post<any>('http://localhost:8080/authenticate',{username,password}).pipe(
+      return this.httpClient.post<any>(this.API_URL + '/authenticate',{username,password}).pipe(
        map(
          userData => {
           sessionStorage.setItem('username',username);
+          sessionStorage.setItem('role',userData.role);
           let tokenStr= 'Bearer '+userData.token;
           sessionStorage.setItem('token', tokenStr);
           return userData;

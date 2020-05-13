@@ -26,13 +26,31 @@ export class AdminComponent implements OnInit {
   displayedColumns: string[] = [ 'nombre', 'apellido', 'curp', 'estatus'];
   dataSource;
   citizens:Array<Citizen> = [{
-    firstname: '',
-    maternalLastName: '',
-    curp: '',
+    firstname: 'Arnoldo',
+    maternalLastName: 'Bazaldua',
+    curp: 'BAXA432536',
     accepted: 1
-  }]
+  },
+  {
+    firstname: 'Bruno',
+    maternalLastName: 'Hiram',
+    curp: 'BR1N7327849',
+    accepted: 1
+  },
+  {
+    firstname: 'Oscar',
+    maternalLastName: 'Apellido1',
+    curp: 'OSXA432536',
+    accepted: 1
+  }
+,{
+  firstname: 'Jose Luis',
+  maternalLastName: 'Apellido1',
+  curp: 'JASO432536',
+  accepted: 1
+}]
 
-  filterEmployee: Citizen = { };
+  filterCitizen: Citizen = { };
 
   editEmployee: any;
   formSocialWorker: FormGroup;
@@ -43,6 +61,26 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     this.initFormGroups();
+
+
+  this.dataSource = new MatTableDataSource<Citizen>(this.citizens);
+  this.dataSource.paginator = this.paginator;
+  this.dataSource.filterPredicate = this.customFilterPredicate();
+
+
+
+
+this.cityFilter.valueChanges.subscribe((nameFilterValue) => {
+  this.filterCitizen['firstname'] = nameFilterValue;
+  this.dataSource.filter = JSON.stringify(this.filterCitizen);
+});
+
+this.nameFilter.valueChanges.subscribe((curpFilterValue) => {
+  this.filterCitizen['curp'] = curpFilterValue;
+  this.dataSource.filter = JSON.stringify(this.filterCitizen);
+});
+
+
   }
 
   private initFormGroups() {
@@ -63,7 +101,7 @@ export class AdminComponent implements OnInit {
 
       if (this.globalFilter) {
         // search all text fields
-        globalMatch = data.name.toString().trim().toLowerCase().indexOf(this.globalFilter.toLowerCase()) !== -1;
+        globalMatch = data.firstname.toString().trim().toLowerCase().indexOf(this.globalFilter.toLowerCase()) !== -1;
       }
 
       if (!globalMatch) {
@@ -71,16 +109,15 @@ export class AdminComponent implements OnInit {
       }
 
       let searchString = JSON.parse(filter);
-      return data.livingCity.toString().trim().indexOf(searchString.livingCity) !== -1 &&
-        data.name.toString().trim().toLowerCase().indexOf(searchString.name.toLowerCase()) !== -1;
+      return data.curp.toString().trim().indexOf(searchString.curp) !== -1 &&
+        data.firstname.toString().trim().toLowerCase().indexOf(searchString.firstname.toLowerCase()) !== -1;
     }
     return myFilterPredicate;
   }
 
   applyFilter(filter) {
     this.globalFilter = filter;
-    console.log(this.filterEmployee);
-    this.dataSource.filter = JSON.stringify(this.filterEmployee);
+    this.dataSource.filter = JSON.stringify(this.filterCitizen);
   }
 
 
