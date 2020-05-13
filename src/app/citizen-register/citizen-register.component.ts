@@ -170,9 +170,9 @@ export class CitizenRegisterComponent implements OnInit, OnDestroy {
         hasJob: [null, Validators.required],
         hasOtherSupport: [null, Validators.required],
         isSingle: [null, Validators.required],
-        maternalLastName: [null, Validators.required],
+        maternalLastname: [null, Validators.required],
         lastPaycheckQty: [null],
-        paternalLastName: [null, Validators.required],
+        paternalLastname: [null, Validators.required],
       },
       { validators: [this.requiredPaycheckQty] }
     );
@@ -220,9 +220,9 @@ export class CitizenRegisterComponent implements OnInit, OnDestroy {
       hasJob: value.hasJob === 'true',
       hasOtherSupport: value.hasOtherSupport === 'true',
       isSingle: value.isSingle === 'true',
-      maternalLastName: value.maternalLastName,
+      maternalLastname: value.maternalLastname,
       lastPaycheckQty: value.lastPaycheckQty,
-      paternalLastName: value.paternalLastName,
+      paternalLastname: value.paternalLastname,
     };
     console.log(citizen);
   }

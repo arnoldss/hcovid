@@ -22,6 +22,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { CitizenRegisterComponent } from './citizen-register/citizen-register.component';
 import { SignInComponent } from './sign-in/sign-in.component';
+import { SocialWorkerRegisterComponent } from './social-worker-register/social-worker-register.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
     HeaderComponent,
     CitizenRegisterComponent,
     SignInComponent,
+    SocialWorkerRegisterComponent,
     AdminComponent,
   ],
   imports: [

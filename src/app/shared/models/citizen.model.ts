@@ -9,7 +9,7 @@ export interface Citizen {
   hasJob: boolean;
   hasOtherSupport: boolean;
   isSingle: boolean;
-  maternalLastName: string;
+  maternalLastname: string;
   lastPaycheckQty: number;
-  paternalLastName: string;
+  paternalLastname: string;
 }
