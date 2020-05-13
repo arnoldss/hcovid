@@ -23,7 +23,7 @@ export class AdminComponent implements OnInit {
   globalFilter = '';
   selected :number;
 
-  displayedColumns: string[] = [ 'nombre', 'curp', 'estatus'];
+  displayedColumns: string[] = [ 'nombre', 'apellido', 'curp', 'estatus'];
   dataSource;
   citizens:Array<Citizen> = [{
     firstname: '',
@@ -35,12 +35,6 @@ export class AdminComponent implements OnInit {
   filterEmployee: Citizen = { };
 
   editEmployee: any;
-  form: FormGroup;
-  employeeFormGroup: FormGroup;
-  skillForm: FormGroup;
-  projectForm: FormGroup;
-  countries: any;
-  workLocations: any;
   formSocialWorker: FormGroup;
 
   constructor(private fb: FormBuilder,
@@ -94,17 +88,16 @@ export class AdminComponent implements OnInit {
 /////// stuff for adding 
 
   registerSocialWorker() {
-    const email = this.employeeFormGroup.get('email').value;
-    const password = this.form.get('pwdData').get('password').value;
-    const employee: any = this.employeeFormGroup.value;
+    const email = this.formSocialWorker.get('email').value;
+    const password = this.formSocialWorker.get('pwdData').get('password').value;
   }
 
 /////// stuff for edit
 
 selectEmployee(employee) {
   this.editEmployee = employee;
-  this.skillForm.reset();
-  this.projectForm.reset();
+//  this.skillForm.reset();
+//  this.projectForm.reset();
 }
 
 
