@@ -1,16 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
-import { Employee } from '../employee/employee.model';
-import { EmployeeService } from '../employee/employee.service';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormValidators } from '../shared/form-validators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WorkLocation } from '../shared/models/work-location.model';
-import { Country } from '../shared/models/country.model';
-import { Skill } from '../shared/models/skill.model';
 import { take, map } from 'rxjs/operators';
-import { Project } from '../shared/models/project.model';
 import { ThrowStmt } from '@angular/compiler';
 
 @Component({
@@ -25,13 +19,9 @@ export class AdminComponent implements OnInit {
   globalFilter = '';
   selected :number;
 
-  countries: Country[];
-
-  workLocations: WorkLocation[];
-
   displayedColumns: string[] = [ 'name', 'city', 'country'];
   dataSource;
-  employees:Array<Employee> = [{
+  employees:Array<any> = [{
     docId: '',
     email: '',
     idEmployee: '',
@@ -53,7 +43,7 @@ export class AdminComponent implements OnInit {
   }]
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  filterEmployee: Employee = {
+  filterEmployee: any = {
     email: '',
     docId: '',
     idEmployee: '',
@@ -74,14 +64,15 @@ export class AdminComponent implements OnInit {
     authorUid: ''
   };
 
-  editEmployee: Employee;
+  editEmployee: any;
   form: FormGroup;
   employeeFormGroup: FormGroup;
   skillForm: FormGroup;
   projectForm: FormGroup;
+  countries: any;
+  workLocations: any;
 
   constructor(private fb: FormBuilder,
-              private employeeServ: EmployeeService,
               private route: ActivatedRoute,
               private router: Router) { }
 
@@ -139,14 +130,14 @@ export class AdminComponent implements OnInit {
   }
 
   onAddSkill() {
-    const newSkill: Skill = this.skillForm.value;
-    const skills = [...this.editEmployee.skills];
-    skills.push(newSkill);
-    this.editEmployee.skills = skills;
-    this._updateEmployee();
+  //  // const newSkill: Skill = this.skillForm.value;
+  //   const skills = [...this.editEmployee.skills];
+  //   skills.push(newSkill);
+  //   this.editEmployee.skills = skills;
+  //   this._updateEmployee();
   }
 
-  onEmployeeDelete(employee: Employee) {
+  onEmployeeDelete(employee: any) {
 
   }
 
@@ -158,11 +149,11 @@ export class AdminComponent implements OnInit {
   }
 
   onProjectSubmit() {
-    const newProject: Project = this.projectForm.value;
-    const projects = [...this.editEmployee.projects];
-    projects.push(newProject);
-    this.editEmployee.projects = projects;
-    this._updateEmployee();
+    // const newProject: Project = this.projectForm.value;
+    // const projects = [...this.editEmployee.projects];
+    // projects.push(newProject);
+    // this.editEmployee.projects = projects;
+    // this._updateEmployee();
   }
 
   onSkillDelete(index: number) {
@@ -176,18 +167,18 @@ export class AdminComponent implements OnInit {
 
   }
 
-  getWorkLocations(countryCode: string): WorkLocation[] {
-    return this.workLocations.filter(location => location.countryCode === countryCode);
-  }
+   getWorkLocations(countryCode: string): any[] {
+      return [];
+   }
 
   onSubmit() {
     const email = this.employeeFormGroup.get('email').value;
     const password = this.form.get('pwdData').get('password').value;
-    const employee: Employee = this.employeeFormGroup.value;
+    const employee: any = this.employeeFormGroup.value;
   }
 
   customFilterPredicate() {
-    const myFilterPredicate = (data: Employee, filter: string): boolean => {
+    const myFilterPredicate = (data: any, filter: string): boolean => {
       var globalMatch = !this.globalFilter;
 
       if (this.globalFilter) {

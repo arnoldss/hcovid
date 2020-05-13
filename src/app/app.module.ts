@@ -7,7 +7,6 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { HeaderComponent } from './header/header.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { EmployeeComponent } from './employee/employee.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms'
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -22,13 +21,13 @@ import { MatCardModule } from '@angular/material/card';
 import { AdminComponent } from './admin/admin.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    EmployeeComponent,
     HeaderComponent,
     RegisterComponent,
     SignInComponent,
@@ -37,6 +36,7 @@ import { MatRadioModule } from '@angular/material/radio';
   imports: [
     AppRoutingModule,
     BrowserModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
     MatAutocompleteModule,
@@ -54,7 +54,7 @@ import { MatRadioModule } from '@angular/material/radio';
     MatPaginatorModule,
     MatRadioModule
   ],
-  providers: [],
+  providers: [HttpClientModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
