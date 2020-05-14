@@ -1,47 +1,30 @@
-<div class="register-container">
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+<div class="register-sw">
+  <form [formGroup]="formSocialWorker" (ngSubmit)="registerSocialWorker()">
     <mat-form-field>
-      <mat-label>Nombre(s)</mat-label>
-      <input matInput type="text" placeholder="Nombre" formControlName="firstname" />
+      <mat-label>Email</mat-label>
+      <input matInput type="text" placeholder="Email" formControlName="email" />
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Apellidos</mat-label>
-      <input matInput type="text" placeholder="Apellidos" formControlName="lastname" />
+      <mat-label>Password</mat-label>
+      <input matInput type="password" placeholder="Password" formControlName="password" />
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Correo</mat-label>
-      <input
-        matInput
-        type="email"
-        placeholder="Correo electrónico"
-        formControlName="email"
-      />
-    </mat-form-field>
+    <div class="radio-group">
+      <mat-label>¿Admin?</mat-label>
+      <mat-radio-group formControlName="isAdmin">
+        <mat-radio-button value="true">Si</mat-radio-button>
+        <mat-radio-button value="false">No</mat-radio-button>
+      </mat-radio-group>
+    </div>
 
-    <mat-form-field>
-      <mat-label>Contraseña</mat-label>
-      <input
-        matInput
-        type="password"
-        placeholder="Contraseña"
-        formControlName="password"
-      />
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Confirmar contraseña</mat-label>
-      <input
-        matInput
-        type="password"
-        placeholder="Confirmar Contraseña"
-        formControlName="pwdConfirm"
-      />
-    </mat-form-field>
-
-    <button mat-raised-button [disabled]="!form.valid" color="primary" type="submit">
-      Registrar
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!formSocialWorker.valid"
+    >
+      Register
     </button>
   </form>
 </div>

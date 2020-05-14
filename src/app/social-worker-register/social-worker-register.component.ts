@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormValidators } from '../shared/form-validators';
 import { SocialWorker } from '../shared/models/social-worker.model';
+import { CitizenInfoService } from '../citizen-info/citizen-info.service';
 
 @Component({
   selector: 'app-social-worker-register',
@@ -9,30 +10,34 @@ import { SocialWorker } from '../shared/models/social-worker.model';
   styleUrls: ['social-worker-register.component.scss'],
 })
 export class SocialWorkerRegisterComponent implements OnInit {
-  form: FormGroup;
+  formSocialWorker: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private citizenInfoServ: CitizenInfoService) {}
 
   ngOnInit() {
-    this.form = this.fb.group(
-      {
-        firstname: [null, Validators.required],
-        lastname: [null, Validators.required],
-        email: [null, [Validators.required, Validators.email]],
-        password: [null, Validators.required],
-        pwdConfirm: [null, Validators.required],
-      },
-      { validators: [FormValidators.confirmPassword] }
-    );
+    this.formSocialWorker = this.fb.group({
+      email: [null, Validators.required],
+      password: [null, Validators.required],
+      isAdmin: [null, Validators.required],
+    });
   }
 
-  onSubmit() {
-    const value = this.form.value;
-    const socialWorker: SocialWorker = {
-      firstname: value.firstname,
-      lastname: value.lastname,
-    };
-    const password = value.password;
-    console.log(socialWorker, password);
+  registerSocialWorker() {
+    const email = this.formSocialWorker.get('email').value;
+    const password = this.formSocialWorker.get('password').value;
+    let admin = this.formSocialWorker.get('isAdmin').value;
+    if (admin === null) {
+      admin = '';
+    }
+
+    this.citizenInfoServ.registerServiceWorker(email, password, admin).subscribe(
+      (data) => {
+        this.formSocialWorker.reset();
+        alert('Usuario agregado');
+      },
+      (error) => {
+        alert('A ocurrido un error');
+      }
+    );
   }
 }

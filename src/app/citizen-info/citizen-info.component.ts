@@ -31,7 +31,14 @@ export class CitizenInfoComponent implements OnInit {
   globalFilter = '';
   selected = 0;
 
-  displayedColumns: string[] = ['nombre', 'apellido', 'curp', 'estatus', 'accept', 'socialWorker'];
+  displayedColumns: string[] = [
+    'nombre',
+    'apellido',
+    'curp',
+    'estatus',
+    'accept',
+    'socialWorker',
+  ];
   dataSource;
   citizens: Array<Citizen> = [
     {
@@ -85,7 +92,6 @@ export class CitizenInfoComponent implements OnInit {
   };
 
   editEmployee: any;
-  formSocialWorker: FormGroup;
 
   //edit stuff variables
 
@@ -98,10 +104,9 @@ export class CitizenInfoComponent implements OnInit {
   formEdit: FormGroup;
   editCitizen: any;
 
-
   //Social workers vars
 
-  socialWorkers : Array<SocialWorker> ;
+  socialWorkers: Array<SocialWorker>;
   socialWorker: FormGroup;
 
   constructor(
@@ -117,19 +122,13 @@ export class CitizenInfoComponent implements OnInit {
 
     //REQUEST TO RECEIVE CITIZENES!!!
 
+    //Request to receive social workers!!!!
 
-
-
-        //Request to receive social workers!!!!
-
-        this.socialWorkers = [
-          {id: '0',
-          firstname: 'Juan Bazaldua Torres'},
-          {id: '1',
-          firstname: 'Pablo Bazaldua '},
-          {id: '2',
-          firstname: 'Christian Torres'},] 
-
+    this.socialWorkers = [
+      { id: '0', firstname: 'Juan Bazaldua Torres' },
+      { id: '1', firstname: 'Pablo Bazaldua ' },
+      { id: '2', firstname: 'Christian Torres' },
+    ];
 
     this.dataSource = new MatTableDataSource<Citizen>(this.citizens);
     this.dataSource.paginator = this.paginator;
@@ -146,21 +145,15 @@ export class CitizenInfoComponent implements OnInit {
     });
 
     this.socialWorkerFC.valueChanges.subscribe((assignedSocialWorker) => {
-       console.log(assignedSocialWorker)
+      console.log(assignedSocialWorker);
     });
   }
 
   private initFormGroups() {
-    this.formSocialWorker = this.fb.group({
-      username: [null, Validators.required],
-      password: [null, Validators.required],
-      isAdmin: [null, Validators.required],
+    this.socialWorker = this.fb.group({
+      assignedSocialWorker: null,
     });
 
-    this.socialWorker = this.fb.group({
-      assignedSocialWorker: null
-    });
-    
     this.formEdit = this.fb.group(
       {
         birthDate: [null, Validators.required],
@@ -218,36 +211,15 @@ export class CitizenInfoComponent implements OnInit {
     this.dataSource.filter = JSON.stringify(this.filterCitizen);
   }
 
-  /////// stuff for adding
-
-  registerSocialWorker() {
-    const email = this.formSocialWorker.get('username').value;
-    const password = this.formSocialWorker.get('password').value;
-    let admin = this.formSocialWorker.get('isAdmin').value;
-    if (admin === null) {
-      admin = '';
-    }
-
-    this.citizenInfoService.registerServiceWorker(email, password, admin).subscribe(
-      (data) => {
-        this.formSocialWorker.reset();
-        alert('Usuario agregado');
-      },
-      (error) => {
-        alert('A ocurrido un error');
-      }
-    );
-  }
-
   /////// stuff for edit
 
   selectCitizen(citizen) {
     this.selected = 1;
-    console.log(citizen);    
-    console.log(this.selected);    
+    console.log(citizen);
+    console.log(this.selected);
     this.formEdit.get('govSupport').setValue([]);
     this.formEdit.reset();
-        this.editCitizen = citizen;
+    this.editCitizen = citizen;
     this.formEdit.get('firstname').setValue(citizen.firstname);
     this.formEdit.get('paternalLastname').setValue(citizen.paternalLastname);
     this.formEdit.get('maternalLastname').setValue(citizen.maternalLastname);
@@ -298,7 +270,7 @@ export class CitizenInfoComponent implements OnInit {
       maternalLastname: value.maternalLastname,
       lastPaycheckQty: value.lastPaycheckQty,
       paternalLastname: value.paternalLastname,
-      assignedSocialWorker: value.assignedSocialWorker
+      assignedSocialWorker: value.assignedSocialWorker,
     };
     console.log(citizen);
 
@@ -358,25 +330,17 @@ export class CitizenInfoComponent implements OnInit {
     }
   }
 
-
-
   //   buttons handlers changing tab stuff
 
   onCitizenAccept(element) {
     // REQUEST TO ACCEPT SUPPORT TO CITIZEN
   }
 
-
   onAssignSocialWorker(element) {
-   console.log(     element   )
+    console.log(element);
   }
-
-
 
   changeTab(i) {
     this.selected = i;
   }
-
- 
-
 }

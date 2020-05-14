@@ -4,5 +4,4 @@ export interface SocialWorker {
   id?: string;
   password?: string;
   username?: string;
-
 }
