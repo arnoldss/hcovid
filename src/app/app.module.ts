@@ -23,6 +23,7 @@ import { HeaderComponent } from './header/header.component';
 import { CitizenRegisterComponent } from './citizen-register/citizen-register.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SocialWorkerRegisterComponent } from './social-worker-register/social-worker-register.component';
+import { CitizenProfileComponent } from './citizen/profile/citizen-profile.component';
 import { BasicAuthService } from './shared/services/basic-auth.service';
 
 @NgModule({
@@ -30,6 +31,7 @@ import { BasicAuthService } from './shared/services/basic-auth.service';
     AppComponent,
     HeaderComponent,
     CitizenRegisterComponent,
+    CitizenProfileComponent,
     SignInComponent,
     SocialWorkerRegisterComponent,
     CitizenInfoComponent,
@@ -55,12 +57,14 @@ import { BasicAuthService } from './shared/services/basic-auth.service';
     MatPaginatorModule,
     MatRadioModule,
   ],
-  providers: [HttpClientModule,
+  providers: [
+    HttpClientModule,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: BasicAuthService,
-      multi: true
-    }],
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

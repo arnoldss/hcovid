@@ -1,17 +1,21 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, FormArray } from '@angular/forms';
-import { FormValidators } from '../shared/form-validators';
-import { ActivatedRoute, Router } from '@angular/router';
-import { take, map } from 'rxjs/operators';
-import { ThrowStmt } from '@angular/compiler';
-import { Citizen } from '../shared/models/citizen.model';
-import { CitizenInfoService } from './citizen-info.service';
-import { states } from '../shared/models/states.model';
 import { MatRadioChange } from '@angular/material/radio';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Citizen } from '../shared/models/citizen.model';
 import { GovernmentSupport } from '../shared/models/gov-support.model';
 import { SocialWorker } from '../shared/models/social-worker.model';
+import { State } from '../shared/models/state.model';
+import { CitizenInfoService } from './citizen-info.service';
 
 @Component({
   selector: 'citizen-info',
@@ -43,18 +47,16 @@ export class CitizenInfoComponent implements OnInit {
       birthStateId: 3,
       isSingle: true,
       hasOtherSupport: true,
-      govSupport: [{
-        supportId: 'jvn-futuro',
-         otherSupportName: 'cool'
-        
-      },
-      {
-        supportId: 'other',
-         otherSupportName: 'ayuda diaria'
-        
-      }],
-      assignedSocialWorker: '3'
-
+      govSupport: [
+        {
+          supportId: 'jvn-futuro',
+          otherSupportName: 'cool',
+        },
+        {
+          supportId: 'other',
+          otherSupportName: 'ayuda diaria',
+        },
+      ],
     },
     {
       firstname: 'Bruno',
@@ -78,16 +80,15 @@ export class CitizenInfoComponent implements OnInit {
 
   filterCitizen: Citizen = {
     firstname: '',
-    curp: ''
+    curp: '',
   };
 
   editEmployee: any;
   formSocialWorker: FormGroup;
 
-
   //edit stuff variables
 
-  states= states;
+  states: State[] = [];
 
   govSupportOptions = [
     { value: 'jvn-futuro', label: 'Jóvenes por un Futuro' },
@@ -110,10 +111,10 @@ export class CitizenInfoComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.route.data.subscribe((data) => (this.states = data.states));
     this.initFormGroups();
 
-
-        //REQUEST TO RECEIVE CITIZENES!!!
+    //REQUEST TO RECEIVE CITIZENES!!!
 
 
 
@@ -133,20 +134,15 @@ export class CitizenInfoComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.filterPredicate = this.customFilterPredicate();
 
+    this.nameFilter.valueChanges.subscribe((nameFilterValue) => {
+      this.filterCitizen['firstname'] = nameFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filterCitizen);
+    });
 
-
-
-this.nameFilter.valueChanges.subscribe((nameFilterValue) => {
-  this.filterCitizen['firstname'] = nameFilterValue;
-  this.dataSource.filter = JSON.stringify(this.filterCitizen);
-});
-
-this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
-  this.filterCitizen['curp'] = curpFilterValue;
-  this.dataSource.filter = JSON.stringify(this.filterCitizen);
-});
-
-
+    this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
+      this.filterCitizen['curp'] = curpFilterValue;
+      this.dataSource.filter = JSON.stringify(this.filterCitizen);
+    });
   }
 
   private initFormGroups() {
@@ -172,10 +168,7 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
       },
       { validators: [this.requiredPaycheckQty] }
     );
-
   }
-
-
 
   //// stuff for filtering
 
@@ -212,7 +205,7 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
 
   applyFilter(filter) {
     this.globalFilter = filter;
-    console.log(this.filterCitizen)
+    console.log(this.filterCitizen);
     this.dataSource.filter = JSON.stringify(this.filterCitizen);
   }
 
@@ -221,16 +214,18 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
   registerSocialWorker() {
     const email = this.formSocialWorker.get('username').value;
     const password = this.formSocialWorker.get('password').value;
-    let admin =  this.formSocialWorker.get('isAdmin').value;
-    if(admin === null)  {admin = "";}
+    let admin = this.formSocialWorker.get('isAdmin').value;
+    if (admin === null) {
+      admin = '';
+    }
 
     this.citizenInfoService.registerServiceWorker(email, password, admin).subscribe(
       (data) => {
         this.formSocialWorker.reset();
-        alert("Usuario agregado");
+        alert('Usuario agregado');
       },
       (error) => {
-        alert("A ocurrido un error");
+        alert('A ocurrido un error');
       }
     );
   }
@@ -249,13 +244,12 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
     this.formEdit.get('birthStateId').setValue(citizen.birthStateId);
     this.formEdit.get('hasJob').setValue(citizen.hasJob + '');
     if (citizen.hasJob)
-    this.formEdit.get('lastPaycheckQty').setValue(citizen.lastPaycheckQty);
+      this.formEdit.get('lastPaycheckQty').setValue(citizen.lastPaycheckQty);
     this.formEdit.get('dependantQty').setValue(citizen.dependantQty);
     this.formEdit.get('isSingle').setValue(citizen.isSingle + '');
     this.formEdit.get('hasOtherSupport').setValue(citizen.hasOtherSupport + '');
-    if(citizen.hasOtherSupport) {
-      citizen.govSupport.forEach((v:GovernmentSupport) => {
-        
+    if (citizen.hasOtherSupport) {
+      citizen.govSupport.forEach((v: GovernmentSupport) => {
         const form = this.fb.group(
           {
             supportType: v.supportId,
@@ -264,14 +258,12 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
           { validators: [this.requiredOtherSupportName] }
         );
         this.getGovSupportArray().push(form);
-        });
-
+      });
     }
     //this.formEdit.get('supportType').setValue(citizen.supportType);
     //this.formEdit.get('birthStateId').setValue(citizen.birthStateId);
 
     //this.formEdit.get('firstname').setValue(citizen.firstname);
-
   }
 
   requiredPaycheckQty(form: FormGroup): ValidationErrors {
@@ -284,7 +276,7 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
       return null;
     }
   }
-  
+
   onSubmitEdit() {
     const value = this.formEdit.value;
     const citizen: Citizen = {
@@ -336,7 +328,6 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
     }
   }
 
-  
   onHasOtherSupportChange(event: MatRadioChange) {
     const hasOtherSupport = event.value === 'true';
     if (hasOtherSupport) {
@@ -359,12 +350,8 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
     }
   }
 
-
-
-  
   onCitizenAccept(element) {
-// REQUEST TO ACCEPT SUPPORT TO CITIZEN
-
+    // REQUEST TO ACCEPT SUPPORT TO CITIZEN
   }
 
 

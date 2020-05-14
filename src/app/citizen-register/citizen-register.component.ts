@@ -8,7 +8,8 @@ import {
 } from '@angular/forms';
 import { MatRadioChange } from '@angular/material/radio';
 import { Citizen } from '../shared/models/citizen.model';
-import { states } from '../shared/models/states.model';
+import { State } from '../shared/models/state.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-citizen-register',
@@ -21,10 +22,9 @@ export class CitizenRegisterComponent implements OnInit, OnDestroy {
     { value: 'jvn-futuro', label: 'Jóvenes por un Futuro' },
     { value: 'adt-mayores', label: 'Adultos Mayores' },
   ];
- 
-  states = states;
+  states: State[] = [];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private route: ActivatedRoute) {}
 
   private _emptyGovSupportArray() {
     this.getGovSupportArray().controls.forEach((control) =>
@@ -49,6 +49,7 @@ export class CitizenRegisterComponent implements OnInit, OnDestroy {
       },
       { validators: [this.requiredPaycheckQty] }
     );
+    this.route.data.subscribe((data) => (this.states = data.states));
   }
 
   ngOnDestroy() {
