@@ -14,4 +14,32 @@ export class FormValidators {
       };
     }
   }
+
+  public static maxDigitLength(maxLength: number) {
+    return (control: AbstractControl) => {
+      const value: number = control.value;
+      if (value != null) {
+        const length = value.toString().length;
+        if (length > maxLength) {
+          return { maxDigitLength: true };
+        }
+      } else {
+        return null;
+      }
+    };
+  }
+
+  public static minDigitLength(minLength: number) {
+    return (control: AbstractControl) => {
+      const value: number = control.value;
+      if (value != null) {
+        const length = value.toString().length;
+        if (length < minLength) {
+          return { minDigitLength: true };
+        }
+      } else {
+        return null;
+      }
+    };
+  }
 }

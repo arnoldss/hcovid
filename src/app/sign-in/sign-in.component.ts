@@ -30,8 +30,8 @@ export class SignInComponent implements OnInit {
   }
 
   onCitizenSubmit() {
-    const curp = this.citizenStatusForm.value.curp;
-    console.log(curp);
+    const curp: string = this.citizenStatusForm.value.curp;
+    this.router.navigate(['/citizen', curp]);
   }
 
   onSocialWorkerSubmit() {

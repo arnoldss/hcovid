@@ -1,4 +1,5 @@
 import { GovernmentSupport } from './gov-support.model';
+import { Address } from './address.model';
 
 export interface Citizen {
   birthDate?: Date;
@@ -14,4 +15,8 @@ export interface Citizen {
   lastPaycheckQty?: number;
   paternalLastname?: string;
   accepted?: number;
+  recommended?: boolean;
+  email?: string;
+  phoneNumber?: number;
+  address?: Address;
 }
