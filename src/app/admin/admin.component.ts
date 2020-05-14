@@ -10,6 +10,7 @@ import { Citizen } from '../shared/models/citizen.model';
 import { AdminService } from './admin.service';
 import { states } from '../shared/models/states.model';
 import { MatRadioChange } from '@angular/material/radio';
+import { GovernmentSupport } from '../shared/models/gov-support.model';
 
 @Component({
   selector: 'app-admin',
@@ -33,7 +34,21 @@ export class AdminComponent implements OnInit {
       curp: 'BAXA432536',
       accepted: 1,
       hasJob: true,
-      lastPaycheckQty: 4000
+      lastPaycheckQty: 4000,
+      birthStateId: 3,
+      isSingle: true,
+      hasOtherSupport: true,
+      govSupport: [{
+        supportId: 'jvn-futuro',
+         otherSupportName: 'cool'
+        
+      },
+      {
+        supportId: 'other',
+         otherSupportName: 'ayuda diaria'
+        
+      }]
+
     },
     {
       firstname: 'Bruno',
@@ -45,18 +60,6 @@ export class AdminComponent implements OnInit {
       firstname: 'Bruno',
       maternalLastname: 'Hiram',
       curp: 'BR1N7327849',
-      accepted: 1,
-    },
-    {
-      firstname: 'Bruno',
-      maternalLastname: 'Hiram',
-      curp: 'BR1N7327849',
-      accepted: 1,
-    },
-    {
-      firstname: 'Oscar',
-      maternalLastname: 'Apellido1',
-      curp: 'OSXA432536',
       accepted: 1,
     },
     {
@@ -220,6 +223,25 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
     this.formEdit.get('hasJob').setValue(citizen.hasJob + '');
     if (citizen.hasJob)
     this.formEdit.get('lastPaycheckQty').setValue(citizen.lastPaycheckQty);
+    this.formEdit.get('dependantQty').setValue(citizen.dependantQty);
+    this.formEdit.get('isSingle').setValue(citizen.isSingle);
+    this.formEdit.get('hasOtherSupport').setValue(citizen.hasOtherSupport + '');
+    if(citizen.hasOtherSupport) {
+      citizen.govSupport.forEach((v:GovernmentSupport) => {
+        
+        const form = this.fb.group(
+          {
+            supportType: v.supportId,
+            otherSupportName: v.otherSupportName,
+          },
+          { validators: [this.requiredOtherSupportName] }
+        );
+        this.getGovSupportArray().push(form);
+        });
+
+    }
+    //this.formEdit.get('supportType').setValue(citizen.supportType);
+    //this.formEdit.get('birthStateId').setValue(citizen.birthStateId);
 
     //this.formEdit.get('firstname').setValue(citizen.firstname);
 
@@ -254,30 +276,6 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
     console.log(citizen);
 
     //REQUEST TO SET CITIZEN
-  }
-
-  onEmployeeDelete(employee: any) {}
-
-  onProjectDelete(index: number) {
-    const projects = [...this.editEmployee.projects];
-    projects.splice(index, 1);
-    this.editEmployee.projects = projects;
-    this._updateCiudadano();
-  }
-
-  onProjectSubmit() {
-    // const newProject: Project = this.projectForm.value;
-    // const projects = [...this.editEmployee.projects];
-    // projects.push(newProject);
-    // this.editEmployee.projects = projects;
-    // this._updateEmployee();
-  }
-
-  onSkillDelete(index: number) {
-    const skills = [...this.editEmployee.skills];
-    skills.splice(index, 1);
-    this.editEmployee.skills = skills;
-    this._updateCiudadano();
   }
 
   private _updateCiudadano() {
@@ -332,6 +330,14 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
     if (this.getGovSupportArray().length <= 0) {
       this.formEdit.get('hasOtherSupport').setValue('false');
     }
+  }
+
+
+
+  
+  onCitizenAccept(element) {
+// REQUEST TO ACCEPT SUPPORT TO CITIZEN
+
   }
 
 }
