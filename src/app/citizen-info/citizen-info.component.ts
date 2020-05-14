@@ -27,8 +27,9 @@ export class CitizenInfoComponent implements OnInit {
 
   curpFilter = new FormControl();
   nameFilter = new FormControl();
+  socialWorkerFC = new FormControl();
   globalFilter = '';
-  selected: number;
+  selected = 0;
 
   displayedColumns: string[] = ['nombre', 'apellido', 'curp', 'estatus', 'accept', 'socialWorker'];
   dataSource;
@@ -101,7 +102,7 @@ export class CitizenInfoComponent implements OnInit {
   //Social workers vars
 
   socialWorkers : Array<SocialWorker> ;
-
+  socialWorker: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -122,12 +123,12 @@ export class CitizenInfoComponent implements OnInit {
         //Request to receive social workers!!!!
 
         this.socialWorkers = [
+          {id: '0',
+          firstname: 'Juan Bazaldua Torres'},
           {id: '1',
-          firstname: 'Juan Bazaldua Torres'},
+          firstname: 'Pablo Bazaldua '},
           {id: '2',
-          firstname: 'Juan Bazaldua Torres'},
-          {id: '3',
-          firstname: 'Juan Bazaldua Torres'},] 
+          firstname: 'Christian Torres'},] 
 
 
     this.dataSource = new MatTableDataSource<Citizen>(this.citizens);
@@ -143,6 +144,10 @@ export class CitizenInfoComponent implements OnInit {
       this.filterCitizen['curp'] = curpFilterValue;
       this.dataSource.filter = JSON.stringify(this.filterCitizen);
     });
+
+    this.socialWorkerFC.valueChanges.subscribe((assignedSocialWorker) => {
+       console.log(assignedSocialWorker)
+    });
   }
 
   private initFormGroups() {
@@ -152,6 +157,10 @@ export class CitizenInfoComponent implements OnInit {
       isAdmin: [null, Validators.required],
     });
 
+    this.socialWorker = this.fb.group({
+      assignedSocialWorker: null
+    });
+    
     this.formEdit = this.fb.group(
       {
         birthDate: [null, Validators.required],
@@ -233,8 +242,10 @@ export class CitizenInfoComponent implements OnInit {
   /////// stuff for edit
 
   selectCitizen(citizen) {
+    this.selected = 1;
     console.log(citizen);    
-    this.getGovSupportArray().setValue([]);
+    console.log(this.selected);    
+    this.formEdit.get('govSupport').setValue([]);
     this.formEdit.reset();
         this.editCitizen = citizen;
     this.formEdit.get('firstname').setValue(citizen.firstname);
@@ -260,10 +271,6 @@ export class CitizenInfoComponent implements OnInit {
         this.getGovSupportArray().push(form);
       });
     }
-    //this.formEdit.get('supportType').setValue(citizen.supportType);
-    //this.formEdit.get('birthStateId').setValue(citizen.birthStateId);
-
-    //this.formEdit.get('firstname').setValue(citizen.firstname);
   }
 
   requiredPaycheckQty(form: FormGroup): ValidationErrors {
@@ -291,6 +298,7 @@ export class CitizenInfoComponent implements OnInit {
       maternalLastname: value.maternalLastname,
       lastPaycheckQty: value.lastPaycheckQty,
       paternalLastname: value.paternalLastname,
+      assignedSocialWorker: value.assignedSocialWorker
     };
     console.log(citizen);
 
@@ -350,13 +358,25 @@ export class CitizenInfoComponent implements OnInit {
     }
   }
 
+
+
+  //   buttons handlers changing tab stuff
+
   onCitizenAccept(element) {
     // REQUEST TO ACCEPT SUPPORT TO CITIZEN
   }
 
 
   onAssignSocialWorker(element) {
-
+   console.log(     element   )
   }
+
+
+
+  changeTab(i) {
+    this.selected = i;
+  }
+
+ 
 
 }
