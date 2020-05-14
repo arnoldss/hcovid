@@ -5,4 +5,7 @@ export interface Address {
   stateId: number;
   streetName: string;
   streetExtNumber: number;
+  streetReference: string;
+  betweenStreet1: string;
+  betweenStreet2: string;
 }

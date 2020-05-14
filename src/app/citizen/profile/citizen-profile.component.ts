@@ -46,6 +46,9 @@ export class CitizenProfileComponent implements OnInit {
         municipality: [null, Validators.required],
         stateId: [null, Validators.required],
         postalCode: [null, Validators.required],
+        betweenStreet1: [null],
+        betweenStreet2: [null],
+        streetReference: [null],
       }),
     });
     this.route.params.subscribe((params) => (this.curp = params.curp));
@@ -67,6 +70,9 @@ export class CitizenProfileComponent implements OnInit {
         stateId: value.addressData.stateId,
         streetName: value.addressData.streetName,
         streetExtNumber: value.addressData.streetExtNumber,
+        betweenStreet1: value.addressData.betweenStreet1,
+        betweenStreet2: value.addressData.betweenStreet2,
+        streetReference: value.addressData.streetReference,
       },
     };
     console.log(citizen);

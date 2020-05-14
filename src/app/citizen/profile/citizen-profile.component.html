@@ -1,13 +1,15 @@
 <div class="profile-container">
-  <div class="status-container">
-    <h1>Estatus de tu solicitud</h1>
-    <p
-      class="status"
-      [ngClass]="{ approved: approved, denied: !approved }"
-      (click)="approved = !approved"
-    >
-      Aprobada
-    </p>
+  <div class="content">
+    <div class="status-container">
+      <h1>Estatus de tu solicitud</h1>
+      <p
+        class="status"
+        [ngClass]="{ approved: approved, denied: !approved }"
+        (click)="approved = !approved"
+      >
+        Aprobada
+      </p>
+    </div>
 
     <form [formGroup]="form" (ngSubmit)="onRecommendedSubmit()">
       <h3>
@@ -120,6 +122,36 @@
             type="number"
             placeholder="Código postal"
             formControlName="postalCode"
+          />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Entrecalle 1 (opcional)</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Entrecalle 1 (opcional)"
+            formControlName="betweenStreet1"
+          />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Entrecalle 2 (opcional)</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Entrecalle 2 (opcional)"
+            formControlName="betweenStreet2"
+          />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Referencias (opcional)</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Referencias (opcional)"
+            formControlName="streetReference"
           />
         </mat-form-field>
       </div>
