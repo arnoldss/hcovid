@@ -1,12 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, FormArray } from '@angular/forms';
 import { FormValidators } from '../shared/form-validators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take, map } from 'rxjs/operators';
 import { ThrowStmt } from '@angular/compiler';
 import { Citizen } from '../shared/models/citizen.model';
+import { AdminService } from './admin.service';
+import { states } from '../shared/models/states.model';
+import { MatRadioChange } from '@angular/material/radio';
 
 @Component({
   selector: 'app-admin',
@@ -21,13 +24,27 @@ export class AdminComponent implements OnInit {
   globalFilter = '';
   selected: number;
 
-  displayedColumns: string[] = ['nombre', 'apellido', 'curp', 'estatus'];
+  displayedColumns: string[] = ['nombre', 'apellido', 'curp', 'estatus', 'delete'];
   dataSource;
   citizens: Array<Citizen> = [
     {
       firstname: 'Arnoldo',
-      maternalLastname: 'Bazaldua',
+      paternalLastname: 'Bazaldua',
       curp: 'BAXA432536',
+      accepted: 1,
+      hasJob: true,
+      lastPaycheckQty: 4000
+    },
+    {
+      firstname: 'Bruno',
+      maternalLastname: 'Hiram',
+      curp: 'BR1N7327849',
+      accepted: 1,
+    },
+    {
+      firstname: 'Bruno',
+      maternalLastname: 'Hiram',
+      curp: 'BR1N7327849',
       accepted: 1,
     },
     {
@@ -58,14 +75,30 @@ export class AdminComponent implements OnInit {
   editEmployee: any;
   formSocialWorker: FormGroup;
 
+
+  //edit stuff variables
+
+  states= states;
+
+  govSupportOptions = [
+    { value: 'jvn-futuro', label: 'Jóvenes por un Futuro' },
+    { value: 'adt-mayores', label: 'Adultos Mayores' },
+  ];
+  formEdit: FormGroup;
+  editCitizen: any;
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private adminService: AdminService
   ) {}
 
   ngOnInit() {
     this.initFormGroups();
+
+
+        //REQUEST TO RECEIVE CITIZENES!!!
 
     this.dataSource = new MatTableDataSource<Citizen>(this.citizens);
     this.dataSource.paginator = this.paginator;
@@ -91,8 +124,29 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
     this.formSocialWorker = this.fb.group({
       username: [null, Validators.required],
       password: [null, Validators.required],
+      isAdmin: [null, Validators.required],
     });
+
+    this.formEdit = this.fb.group(
+      {
+        birthDate: [null, Validators.required],
+        birthStateId: [null, Validators.required],
+        dependantQty: [null, Validators.required],
+        firstname: [null, Validators.required],
+        govSupport: this.fb.array([]),
+        hasJob: [null, Validators.required],
+        hasOtherSupport: [null, Validators.required],
+        isSingle: [null, Validators.required],
+        maternalLastname: [null, Validators.required],
+        lastPaycheckQty: [null],
+        paternalLastname: [null, Validators.required],
+      },
+      { validators: [this.requiredPaycheckQty] }
+    );
+
   }
+
+
 
   //// stuff for filtering
 
@@ -136,16 +190,70 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
   /////// stuff for adding
 
   registerSocialWorker() {
-    const email = this.formSocialWorker.get('email').value;
-    const password = this.formSocialWorker.get('pwdData').get('password').value;
+    const email = this.formSocialWorker.get('username').value;
+    const password = this.formSocialWorker.get('password').value;
+    let admin =  this.formSocialWorker.get('isAdmin').value;
+    if(admin === null)  {admin = "";}
+
+    this.adminService.registerServiceWorker(email, password, admin).subscribe(
+      (data) => {
+        this.formSocialWorker.reset();
+        alert("Usuario agregado");
+      },
+      (error) => {
+        alert("A ocurrido un error");
+      }
+    );
   }
 
   /////// stuff for edit
 
-  selectEmployee(employee) {
-    this.editEmployee = employee;
-    //  this.skillForm.reset();
-    //  this.projectForm.reset();
+  selectCitizen(citizen) {
+    console.log(citizen);
+    this.formEdit.reset();
+    this.editCitizen = citizen;
+    this.formEdit.get('firstname').setValue(citizen.firstname);
+    this.formEdit.get('paternalLastname').setValue(citizen.paternalLastname);
+    this.formEdit.get('maternalLastname').setValue(citizen.maternalLastname);
+    this.formEdit.get('birthDate').setValue(citizen.birthDate);
+    this.formEdit.get('birthStateId').setValue(citizen.birthStateId);
+    this.formEdit.get('hasJob').setValue(citizen.hasJob + '');
+    if (citizen.hasJob)
+    this.formEdit.get('lastPaycheckQty').setValue(citizen.lastPaycheckQty);
+
+    //this.formEdit.get('firstname').setValue(citizen.firstname);
+
+  }
+
+  requiredPaycheckQty(form: FormGroup): ValidationErrors {
+    const hasJob = form.get('hasJob').value === 'true';
+    const lastPaycheckQty = form.get('lastPaycheckQty').value;
+    if (hasJob) {
+      const isNullOrEmpty = lastPaycheckQty == null || lastPaycheckQty === '';
+      return isNullOrEmpty ? { requiredPaycheckQty: true } : null;
+    } else {
+      return null;
+    }
+  }
+  
+  onSubmitEdit() {
+    const value = this.formEdit.value;
+    const citizen: Citizen = {
+      birthDate: value.birthDate,
+      birthStateId: value.birthStateId,
+      dependantQty: value.dependantQty,
+      firstname: value.firstname,
+      govSupport: value.govSupport,
+      hasJob: value.hasJob === 'true',
+      hasOtherSupport: value.hasOtherSupport === 'true',
+      isSingle: value.isSingle === 'true',
+      maternalLastname: value.maternalLastname,
+      lastPaycheckQty: value.lastPaycheckQty,
+      paternalLastname: value.paternalLastname,
+    };
+    console.log(citizen);
+
+    //REQUEST TO SET CITIZEN
   }
 
   onEmployeeDelete(employee: any) {}
@@ -176,4 +284,54 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
     // this.admin.updateCiudadano(this.editEmployee.docId, this.editEmployee)
     //   .then(success => { }, error => console.error(error));
   }
+
+  pushGovSupportForm() {
+    const form = this.fb.group(
+      {
+        supportType: [null, Validators.required],
+        otherSupportName: [null],
+      },
+      { validators: [this.requiredOtherSupportName] }
+    );
+    this.getGovSupportArray().push(form);
+  }
+
+  getGovSupportArray(): FormArray {
+    return this.formEdit.get('govSupport') as FormArray;
+  }
+
+  requiredOtherSupportName(form: FormGroup): ValidationErrors {
+    const isOtherSupport = form.get('supportType').value === 'other';
+    const otherSupportName = form.get('otherSupportName').value;
+    if (isOtherSupport) {
+      const isNullOrEmpty = otherSupportName == null || otherSupportName === '';
+      return isNullOrEmpty ? { requiredOtherSupportName: true } : null;
+    } else {
+      return null;
+    }
+  }
+
+  
+  onHasOtherSupportChange(event: MatRadioChange) {
+    const hasOtherSupport = event.value === 'true';
+    if (hasOtherSupport) {
+      this.pushGovSupportForm();
+    } else {
+      this._emptyGovSupportArray();
+    }
+  }
+
+  private _emptyGovSupportArray() {
+    this.getGovSupportArray().controls.forEach((control) =>
+      this.getGovSupportArray().removeAt(0)
+    );
+  }
+
+  deleteSupport(index: number) {
+    this.getGovSupportArray().removeAt(index);
+    if (this.getGovSupportArray().length <= 0) {
+      this.formEdit.get('hasOtherSupport').setValue('false');
+    }
+  }
+
 }

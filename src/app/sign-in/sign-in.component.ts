@@ -39,9 +39,15 @@ export class SignInComponent implements OnInit {
     const password = this.socialWorkerForm.get('password').value;
     this.signInService.authenticate(email, password).subscribe(
       (data) => {
+        if(data.role === "500") {
         this.router.navigate(['/admin']);
+      } else {
+        this.router.navigate(['/citizen-register']);
+      }
       },
-      (error) => {}
+      (error) => {
+        
+      }
     );
   }
 }

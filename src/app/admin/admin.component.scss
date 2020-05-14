@@ -100,66 +100,12 @@
     }
 
 
+ 
 
 
       @media (max-width: 425px) {
 
       }
-
-      // .flexContainer {
-      //     display: flex;
-      //        flex-flow: row;
-      //        height: 40%;
-      //    }
-
-      //    .flexContainerCard {
-      //     display: flex;
-      //        flex-flow: row;
-      //    }
-
-      // .flexContainerRight {
-      //  display: flex;
-      //  justify-content: space-between;
-
-      //     flex-flow: column;
-      //     width: 50%;
-      //     margin: 30px;
-      //     height: 40%;
-      // }
-
-      // .flexContainerLeft {
-      //     display: flex;
-      //        flex-flow: column;
-      //        justify-content: space-between;
-
-      //        width: 50%;
-      //        margin: 30px;
-      //        height: 40%;
-
-      //        .saveButton {
-      //         width:150px;
-      //       }
-
-
-      //    }
-
-
-
-
-
-      //    .example-card {
-      //     max-width: 400px;
-      //     margin: 50px;
-      //   }
-
-      //   .example-header-image {
-      //     background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-      //     background-size: cover;
-      //   }
-
-
-
-
   }
 
 
@@ -182,4 +128,88 @@
         width: 100%;
       }
     }
+
+    .radio-group {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 17.5px;
+
+      mat-label {
+        width: 50%;
+      }
+
+      mat-radio-group {
+        align-items: center;
+        display: flex;
+        justify-content: space-evenly;
+        width: 50%;
+      }
+    }
   }
+
+
+  .register-container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    padding: 30px 0;
+  
+    form {
+      width: 40%;
+  
+      button[type=submit] {
+        margin-top: 17.5px;
+      }
+  
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+          /* display: none; <- Crashes Chrome on hover */
+          -webkit-appearance: none;
+          margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+      }
+  
+      input[type=number] {
+          -moz-appearance:textfield; /* Firefox */
+      }
+  
+      mat-form-field, button {
+        width: 100%;
+      }
+  
+      mat-hint {
+        display: block;
+        margin-bottom: 20px;
+      }
+  
+      .delete-support-btn {
+        margin-bottom: 17.5px;
+      }
+  
+      .radio-group {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 17.5px;
+  
+        mat-label {
+          width: 50%;
+        }
+  
+        mat-radio-group {
+          align-items: center;
+          display: flex;
+          justify-content: space-evenly;
+          width: 50%;
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 425px) {
+    .register-container {
+      form {
+        width: 80%;
+      }
+    }
+  }
+  
