@@ -1,17 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminComponent } from './admin/admin.component';
+import { CitizenInfoComponent } from './citizen-info/citizen-info.component';
 import { CitizenRegisterComponent } from './citizen-register/citizen-register.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SocialWorkerRegisterComponent } from './social-worker-register/social-worker-register.component';
 import { CitizenProfileComponent } from './citizen/profile/citizen-profile.component';
 import { StateResolver } from './shared/resolvers/state.resolver';
+import { AuthGuardService } from './shared/services/auth-guard.service';
 
 const routes: Routes = [
   { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
   {
-    path: 'admin',
-    component: AdminComponent,
+    path: 'citizen-info',
+    component: CitizenInfoComponent,
+    resolve: { states: StateResolver },
+    //canActivate:[AuthGuardService]
   },
   {
     path: 'citizen-register',

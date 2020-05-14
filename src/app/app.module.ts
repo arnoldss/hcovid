@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -16,7 +16,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AdminComponent } from './admin/admin.component';
+import { CitizenInfoComponent } from './citizen-info/citizen-info.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -24,6 +24,7 @@ import { CitizenRegisterComponent } from './citizen-register/citizen-register.co
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SocialWorkerRegisterComponent } from './social-worker-register/social-worker-register.component';
 import { CitizenProfileComponent } from './citizen/profile/citizen-profile.component';
+import { BasicAuthService } from './shared/services/basic-auth.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import { CitizenProfileComponent } from './citizen/profile/citizen-profile.compo
     CitizenProfileComponent,
     SignInComponent,
     SocialWorkerRegisterComponent,
-    AdminComponent,
+    CitizenInfoComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -56,7 +57,14 @@ import { CitizenProfileComponent } from './citizen/profile/citizen-profile.compo
     MatPaginatorModule,
     MatRadioModule,
   ],
-  providers: [HttpClientModule],
+  providers: [
+    HttpClientModule,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: BasicAuthService,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

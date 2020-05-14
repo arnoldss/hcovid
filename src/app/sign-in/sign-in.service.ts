@@ -48,9 +48,11 @@ export class SignInService {
   
 
   isUserLoggedIn() {
-    let user = sessionStorage.getItem('username')
+    let user = sessionStorage.getItem('username') 
     //console.log(!(user === null))
+    console.log(user)
     return !(user === null)
+  
   }
 
   logOut() {
