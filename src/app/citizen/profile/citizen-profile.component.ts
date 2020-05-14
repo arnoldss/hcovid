@@ -5,6 +5,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FormValidators } from 'src/app/shared/form-validators';
 import { Citizen } from 'src/app/shared/models/citizen.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-citizen-profile',
@@ -12,18 +14,20 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['citizen-profile.component.scss'],
 })
 export class CitizenProfileComponent implements OnInit {
-  approved: boolean = true;
-  curp: string;
+  amount: number;
   form: FormGroup;
   states: State[] = [];
+  status: string;
+  retrieveError: boolean = false;
 
   constructor(
     private fb: FormBuilder,
+    private http: HttpClient,
     private route: ActivatedRoute,
     private snackbar: MatSnackBar
   ) {}
 
-  ngOnInit() {
+  private _initForm() {
     this.form = this.fb.group({
       citizenData: this.fb.group({
         firstname: [null, Validators.required],
@@ -51,7 +55,24 @@ export class CitizenProfileComponent implements OnInit {
         streetReference: [null],
       }),
     });
-    this.route.params.subscribe((params) => (this.curp = params.curp));
+  }
+
+  ngOnInit() {
+    this._initForm();
+    this.route.params.subscribe((params) => {
+      const curp = params.curp;
+      const url = environment.API_URL + '/program/status';
+      this.http.get(url, { params: { curp } }).subscribe(
+        (response: { status: string; amount: number }) => {
+          this.status = response.status;
+          this.amount = response.amount;
+        },
+        (error) => {
+          this.retrieveError = true;
+          console.error(error);
+        }
+      );
+    });
     this.route.data.subscribe((data) => (this.states = data.states));
   }
 

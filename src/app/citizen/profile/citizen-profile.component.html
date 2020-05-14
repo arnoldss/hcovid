@@ -1,15 +1,27 @@
 <div class="profile-container">
   <div class="content">
-    <div class="status-container">
+    <div *ngIf="!retrieveError; else error" class="status-container">
       <h1>Estatus de tu solicitud</h1>
       <p
         class="status"
-        [ngClass]="{ approved: approved, denied: !approved }"
-        (click)="approved = !approved"
+        [ngClass]="{ approved: status === 'aprobado', denied: status !== 'aprobado' }"
       >
-        Aprobada
+        {{ status | uppercase }}
       </p>
     </div>
+
+    <ng-template #error>
+      <div class="status-container">
+        <h1>No encontramos un estatus para tu solicitud :(</h1>
+        <p>
+          Verifica que hayas ingresado correctamente tu CURP o ponte en contacto con
+          nosotros
+        </p>
+        <button mat-raised-button type="button" [routerLink]="['/sign-in']">
+          Volver
+        </button>
+      </div>
+    </ng-template>
 
     <form [formGroup]="form" (ngSubmit)="onRecommendedSubmit()">
       <h3>

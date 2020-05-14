@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SignInService } from './sign-in.service';
 import { FormValidators } from '../shared/form-validators';
+import { SignInService } from './sign-in.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -39,15 +39,13 @@ export class SignInComponent implements OnInit {
     const password = this.socialWorkerForm.get('password').value;
     this.signInService.authenticate(email, password).subscribe(
       (data) => {
-        if(data.role === "500") {
-        this.router.navigate(['/citizen-info']);
-      } else {
-        this.router.navigate(['/citizen-register']);
-      }
+        if (data.role === '500') {
+          this.router.navigate(['/citizen-info']);
+        } else {
+          this.router.navigate(['/citizen-register']);
+        }
       },
-      (error) => {
-        
-      }
+      (error) => {}
     );
   }
 }
