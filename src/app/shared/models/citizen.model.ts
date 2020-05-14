@@ -14,4 +14,5 @@ export interface Citizen {
   lastPaycheckQty?: number;
   paternalLastname?: string;
   accepted?: number;
+  assignedSocialWorker?: string;
 }

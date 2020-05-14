@@ -11,6 +11,7 @@ import { CitizenInfoService } from './citizen-info.service';
 import { states } from '../shared/models/states.model';
 import { MatRadioChange } from '@angular/material/radio';
 import { GovernmentSupport } from '../shared/models/gov-support.model';
+import { SocialWorker } from '../shared/models/social-worker.model';
 
 @Component({
   selector: 'citizen-info',
@@ -25,7 +26,7 @@ export class CitizenInfoComponent implements OnInit {
   globalFilter = '';
   selected: number;
 
-  displayedColumns: string[] = ['nombre', 'apellido', 'curp', 'estatus', 'accept'];
+  displayedColumns: string[] = ['nombre', 'apellido', 'curp', 'estatus', 'accept', 'socialWorker'];
   dataSource;
   citizens: Array<Citizen> = [
     {
@@ -51,7 +52,8 @@ export class CitizenInfoComponent implements OnInit {
         supportId: 'other',
          otherSupportName: 'ayuda diaria'
         
-      }]
+      }],
+      assignedSocialWorker: '3'
 
     },
     {
@@ -94,6 +96,12 @@ export class CitizenInfoComponent implements OnInit {
   formEdit: FormGroup;
   editCitizen: any;
 
+
+  //Social workers vars
+
+  socialWorkers : Array<SocialWorker> ;
+
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -106,6 +114,20 @@ export class CitizenInfoComponent implements OnInit {
 
 
         //REQUEST TO RECEIVE CITIZENES!!!
+
+
+
+
+        //Request to receive social workers!!!!
+
+        this.socialWorkers = [
+          {id: '1',
+          firstname: 'Juan Bazaldua Torres'},
+          {id: '2',
+          firstname: 'Juan Bazaldua Torres'},
+          {id: '3',
+          firstname: 'Juan Bazaldua Torres'},] 
+
 
     this.dataSource = new MatTableDataSource<Citizen>(this.citizens);
     this.dataSource.paginator = this.paginator;
@@ -216,9 +238,10 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
   /////// stuff for edit
 
   selectCitizen(citizen) {
-    console.log(citizen);
+    console.log(citizen);    
+    this.getGovSupportArray().setValue([]);
     this.formEdit.reset();
-    this.editCitizen = citizen;
+        this.editCitizen = citizen;
     this.formEdit.get('firstname').setValue(citizen.firstname);
     this.formEdit.get('paternalLastname').setValue(citizen.paternalLastname);
     this.formEdit.get('maternalLastname').setValue(citizen.maternalLastname);
@@ -341,6 +364,11 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
   
   onCitizenAccept(element) {
 // REQUEST TO ACCEPT SUPPORT TO CITIZEN
+
+  }
+
+
+  onAssignSocialWorker(element) {
 
   }
 
