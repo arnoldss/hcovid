@@ -8,6 +8,9 @@
       >
         {{ status | uppercase }}
       </p>
+      <p *ngIf="status === 'aprobado'">
+        La cantidad de apoyo que te fue aprobada es de: $ {{ amount }}.00 MXN
+      </p>
     </div>
 
     <ng-template #error>
