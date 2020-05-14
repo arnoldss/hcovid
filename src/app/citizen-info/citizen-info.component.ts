@@ -7,17 +7,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { take, map } from 'rxjs/operators';
 import { ThrowStmt } from '@angular/compiler';
 import { Citizen } from '../shared/models/citizen.model';
-import { AdminService } from './admin.service';
+import { CitizenInfoService } from './citizen-info.service';
 import { states } from '../shared/models/states.model';
 import { MatRadioChange } from '@angular/material/radio';
 import { GovernmentSupport } from '../shared/models/gov-support.model';
 
 @Component({
-  selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.scss'],
+  selector: 'citizen-info',
+  templateUrl: './citizen-info.component.html',
+  styleUrls: ['./citizen-info.component.scss'],
 })
-export class AdminComponent implements OnInit {
+export class CitizenInfoComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   curpFilter = new FormControl();
@@ -98,7 +98,7 @@ export class AdminComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private adminService: AdminService
+    private citizenInfoService: CitizenInfoService
   ) {}
 
   ngOnInit() {
@@ -202,7 +202,7 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
     let admin =  this.formSocialWorker.get('isAdmin').value;
     if(admin === null)  {admin = "";}
 
-    this.adminService.registerServiceWorker(email, password, admin).subscribe(
+    this.citizenInfoService.registerServiceWorker(email, password, admin).subscribe(
       (data) => {
         this.formSocialWorker.reset();
         alert("Usuario agregado");

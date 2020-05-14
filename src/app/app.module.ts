@@ -16,7 +16,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AdminComponent } from './admin/admin.component';
+import { CitizenInfoComponent } from './citizen-info/citizen-info.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -32,7 +32,7 @@ import { BasicAuthService } from './shared/services/basic-auth.service';
     CitizenRegisterComponent,
     SignInComponent,
     SocialWorkerRegisterComponent,
-    AdminComponent,
+    CitizenInfoComponent,
   ],
   imports: [
     AppRoutingModule,

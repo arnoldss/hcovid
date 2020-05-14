@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminComponent } from './admin/admin.component';
+import { CitizenInfoComponent } from './citizen-info/citizen-info.component';
 import { CitizenRegisterComponent } from './citizen-register/citizen-register.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SocialWorkerRegisterComponent } from './social-worker-register/social-worker-register.component';
@@ -9,8 +9,8 @@ import { AuthGuardService } from './shared/services/auth-guard.service';
 const routes: Routes = [
   { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
   {
-    path: 'admin',
-    component: AdminComponent,
+    path: 'citizen-info',
+    component: CitizenInfoComponent,
     //canActivate:[AuthGuardService]
   },
   { path: 'citizen-register', component: CitizenRegisterComponent,  },

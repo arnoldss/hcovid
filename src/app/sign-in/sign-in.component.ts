@@ -40,7 +40,7 @@ export class SignInComponent implements OnInit {
     this.signInService.authenticate(email, password).subscribe(
       (data) => {
         if(data.role === "500") {
-        this.router.navigate(['/admin']);
+        this.router.navigate(['/citizen-info']);
       } else {
         this.router.navigate(['/citizen-register']);
       }
