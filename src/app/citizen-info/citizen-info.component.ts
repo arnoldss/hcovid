@@ -1,23 +1,20 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import {
+  FormArray,
+  FormBuilder,
   FormControl,
   FormGroup,
-  FormBuilder,
-  Validators,
   ValidationErrors,
-  FormArray,
+  Validators,
 } from '@angular/forms';
-import { FormValidators } from '../shared/form-validators';
-import { ActivatedRoute, Router } from '@angular/router';
-import { take, map } from 'rxjs/operators';
-import { ThrowStmt } from '@angular/compiler';
-import { Citizen } from '../shared/models/citizen.model';
-import { CitizenInfoService } from './citizen-info.service';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatRadioChange } from '@angular/material/radio';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Citizen } from '../shared/models/citizen.model';
 import { GovernmentSupport } from '../shared/models/gov-support.model';
 import { State } from '../shared/models/state.model';
+import { CitizenInfoService } from './citizen-info.service';
 
 @Component({
   selector: 'citizen-info',
