@@ -25,12 +25,16 @@ export class AdminComponent implements OnInit {
   globalFilter = '';
   selected: number;
 
-  displayedColumns: string[] = ['nombre', 'apellido', 'curp', 'estatus', 'delete'];
+  displayedColumns: string[] = ['nombre', 'apellido', 'curp', 'estatus', 'accept'];
   dataSource;
   citizens: Array<Citizen> = [
     {
       firstname: 'Arnoldo',
       paternalLastname: 'Bazaldua',
+      maternalLastname: 'Cerda',
+      birthDate: new Date('01-07-1991'),
+      dependantQty: 3,
+
       curp: 'BAXA432536',
       accepted: 1,
       hasJob: true,
@@ -224,7 +228,7 @@ this.curpFilter.valueChanges.subscribe((curpFilterValue) => {
     if (citizen.hasJob)
     this.formEdit.get('lastPaycheckQty').setValue(citizen.lastPaycheckQty);
     this.formEdit.get('dependantQty').setValue(citizen.dependantQty);
-    this.formEdit.get('isSingle').setValue(citizen.isSingle);
+    this.formEdit.get('isSingle').setValue(citizen.isSingle + '');
     this.formEdit.get('hasOtherSupport').setValue(citizen.hasOtherSupport + '');
     if(citizen.hasOtherSupport) {
       citizen.govSupport.forEach((v:GovernmentSupport) => {
