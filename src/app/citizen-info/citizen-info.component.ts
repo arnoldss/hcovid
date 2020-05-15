@@ -190,6 +190,12 @@ export class CitizenInfoComponent implements OnInit {
     );
   }
 
+
+  getS(socialWorkers, citizen) {
+    console.log(socialWorkers, citizen);
+    return this.socialWorkers
+  }
+
   //// stuff for filtering
 
   customFilterPredicate() {
