@@ -51,53 +51,12 @@ export class CitizenInfoComponent implements OnInit {
     'edit',
   ];
   dataSource;
-  citizens: Array<Citizen> = [
-    // {
-    //   firstname: 'Arnoldo',
-    //   paternalLastname: 'Bazaldua',
-    //   maternalLastname: 'Cerda',
-    //   birthDate: new Date('01-07-1991'),
-    //   dependantQty: 3,
-
-    //   curp: 'BAXA432536',
-    //   accepted: 1,
-    //   hasJob: true,
-    //   lastPaycheckQty: 4000,
-    //   birthStateId: 3,
-    //   isSingle: true,
-    //   hasOtherSupport: true,
-    //   govSupport: [
-    //     {
-    //       supportId: 'jvn-futuro',
-    //       otherSupportName: 'cool',
-    //     },
-    //     {
-    //       supportId: 'other',
-    //       otherSupportName: 'ayuda diaria',
-    //     },
-    //   ],
-    // },
-    // {
-    //   firstname: 'Bruno',
-    //   maternalLastname: 'García',
-    //   curp: 'AAGB970816HDFLRR32',
-    //   accepted: 1,
-    // },
-    // {
-    //   firstname: 'Jose Luis',
-    //   maternalLastname: 'Apellido1',
-    //   curp: 'JASO432536',
-    //   accepted: 1,
-    // },
-  ];
-
+  citizens: Array<Citizen> = [];
   filterCitizen: Citizen = {
     firstname: '',
     curp: '',
   };
-
   editEmployee: any;
-
   formEdit: FormGroup;
   editCitizen: any;
 
@@ -115,15 +74,14 @@ export class CitizenInfoComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    //REQUEST TO RECEIVE CITIZENES!!!
     const url = environment.API_URL + '/person';
     this.httpClientService.get(url).subscribe(
       (response: Array<any>) => {
         console.log(response);
         this.citizens = response;
-    this.dataSource = new MatTableDataSource<Citizen>(this.citizens);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.filterPredicate = this.customFilterPredicate();
+        this.dataSource = new MatTableDataSource<Citizen>(this.citizens);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.filterPredicate = this.customFilterPredicate();
       },
       (error) => {
         console.error(error);
@@ -156,12 +114,8 @@ export class CitizenInfoComponent implements OnInit {
       this.dataSource.filter = JSON.stringify(this.filterCitizen);
     });
 
-    this.socialWorkerFC.valueChanges.subscribe((assignedSocialWorker) => {
-
-
-    });
+    this.socialWorkerFC.valueChanges.subscribe((assignedSocialWorker) => {});
   }
-
 
   changeD(c, event) {
     console.log(c, event);

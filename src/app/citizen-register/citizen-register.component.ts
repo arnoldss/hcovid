@@ -15,6 +15,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 import { switchMap, tap, filter } from 'rxjs/operators';
+import { FormValidators } from '../shared/form-validators';
 
 @Component({
   selector: 'app-citizen-register',
@@ -31,16 +32,21 @@ export class CitizenRegisterComponent implements OnInit {
   ];
   states: State[] = [];
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute,
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
     private httpClientService: HttpClient,
-    
+
     private http: HttpClient
-    ) {}
+  ) {}
 
   private _initForm() {
     this.form = this.fb.group(
       {
-        curp: [null, Validators.required],
+        curp: [
+          null,
+          [Validators.required, Validators.pattern(FormValidators.CURP_REGEX)],
+        ],
         birthDate: [null, Validators.required],
         birthStateId: [null, Validators.required],
         dependantQty: [null, Validators.required],
@@ -63,6 +69,14 @@ export class CitizenRegisterComponent implements OnInit {
     );
   }
 
+  private _parseDate(date: Date) {
+    const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+    const month =
+      date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+  }
+
   ngOnInit() {
     this._initForm();
     this.route.params
@@ -76,6 +90,7 @@ export class CitizenRegisterComponent implements OnInit {
       )
       .subscribe((response: any) => {
         const value = {
+          curp: response.curp,
           birthDate: null,
           birthStateId: null,
           dependantQty: null,
@@ -125,6 +140,7 @@ export class CitizenRegisterComponent implements OnInit {
   onSubmit() {
     const value = this.form.value;
     const citizen: Citizen = {
+      curp: value.curp,
       birthDate: value.birthDate,
       birthStateId: value.birthStateId,
       dependantQty: value.dependantQty,
@@ -137,38 +153,28 @@ export class CitizenRegisterComponent implements OnInit {
       lastPaycheckQty: value.lastPaycheckQty,
       paternalLastname: value.paternalLastname,
     };
-    console.log(citizen);
     const url = environment.API_URL + '/person';
+    const dob = this._parseDate(citizen.birthDate);
+    const body = {
+      id: this.editCitizenId != null ? this.editCitizenId : '1',
+      curp: citizen.curp,
+      name: citizen.firstname,
+      celularPhone: '0000000000',
+      dob,
+      formalJob: citizen.hasJob ? 'true' : 'false',
+      lastPayCheckIncome: citizen.lastPaycheckQty.toString(),
+      anotherGovernmentProgram: citizen.hasOtherSupport ? 'true' : 'false',
+      single: citizen.isSingle ? 'true' : 'false',
+      pension: 'false',
+      pensionAmount: '0',
+      accountNumber: '12',
+      clabe: '12',
+      tarjeta: '12',
+      bank: 'test',
+      userId: sessionStorage.getItem('userID'),
+    };
+    console.log(body);
     if (this.editMode) {
-      const day =
-        citizen.birthDate.getDate() < 10
-          ? `0${citizen.birthDate.getDate()}`
-          : citizen.birthDate.getDate();
-      const month =
-        citizen.birthDate.getMonth() + 1 < 10
-          ? `0${citizen.birthDate.getMonth() + 1}`
-          : citizen.birthDate.getMonth() + 1;
-      const year = citizen.birthDate.getFullYear();
-      const dob = `${year}-${month}-${day}`;
-      console.log(dob);
-      const body = {
-        id: this.editCitizenId,
-        curp: 'hardcodedCURP',
-        name: citizen.firstname,
-        celularPhone: '0000000000',
-        dob,
-        formalJob: citizen.hasJob ? 'true' : 'false',
-        lastPayCheckIncome: citizen.lastPaycheckQty,
-        anotherGovernmentProgram: citizen.hasOtherSupport ? 'true' : 'false',
-        single: citizen.isSingle ? 'true' : 'false',
-        pension: 'false',
-        pensionAmount: '0',
-        accountNumber: '12',
-        clabe: '12',
-        tarjeta: '12',
-        bank: 'test',
-        userId: '1',
-      };
       this.http.patch(url, body).subscribe(
         (response) => {
           console.log(response);
@@ -178,45 +184,13 @@ export class CitizenRegisterComponent implements OnInit {
         (error) => console.error(error)
       );
     } else {
-      
-
-     let str =  new Date(value.birthDate) + ''.substring(0, 10);
-    let urlPerson = environment.API_URL + '/person';
-    this.httpClientService.post(urlPerson, 
-    {
-      //"id": "86",
-      "curp": value.curp + '',
-      "name": value.firstname + ' ' + value.maternalLastname + ' ',
-       "celularPhone": "POC",   
-      "dob": '01-01-1993',
-      "formalJob": value.hasJob + '',
-      "lastPayCheckIncome": value.lastPaycheckQty === null ? "0" : value.lastPaycheckQty + '',
-      "anotherGovernmentProgram": value.hasOtherSupport + '',
-      "single": value.isSingle + '',
-      "pension": "true",
-      "pensionAmount": "0",
-      "accountNumber": "0",
-      "clabe": "0",
-      "tarjeta": "0",
-      "bank": "test",
-      "userId": sessionStorage.getItem('userID')
-      }
-      ).subscribe(
-      (response) => {
-        console.log(response)
-
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-      }
-    
-
-
-
+      const url = environment.API_URL + '/person';
+      this.httpClientService.post(url, body).subscribe(
+        (response) => console.log(response),
+        (error) => console.error(error)
+      );
     }
-  
+  }
 
   pushGovSupportForm() {
     const form = this.fb.group(
