@@ -39,6 +39,9 @@ export class SignInService {
           sessionStorage.setItem('role',userData.role);
           let tokenStr= 'Bearer '+userData.token;
           sessionStorage.setItem('token', tokenStr);
+          sessionStorage.setItem('userID', userData.userId);
+
+          
           return userData;
          }
        )
