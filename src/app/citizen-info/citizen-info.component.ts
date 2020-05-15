@@ -16,6 +16,8 @@ import { GovernmentSupport } from '../shared/models/gov-support.model';
 import { SocialWorker } from '../shared/models/social-worker.model';
 import { State } from '../shared/models/state.model';
 import { CitizenInfoService } from './citizen-info.service';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'citizen-info',
@@ -38,7 +40,6 @@ export class CitizenInfoComponent implements OnInit {
 
   displayedColumns: string[] = [
     'nombre',
-    'apellido',
     'curp',
     'estatus',
     'accept',
@@ -46,51 +47,7 @@ export class CitizenInfoComponent implements OnInit {
     'edit',
   ];
   dataSource;
-  citizens: Array<Citizen> = [
-    {
-      firstname: 'Arnoldo',
-      paternalLastname: 'Bazaldua',
-      maternalLastname: 'Cerda',
-      birthDate: new Date('01-07-1991'),
-      dependantQty: 3,
-
-      curp: 'BAXA432536',
-      accepted: 1,
-      hasJob: true,
-      lastPaycheckQty: 4000,
-      birthStateId: 3,
-      isSingle: true,
-      hasOtherSupport: true,
-      govSupport: [
-        {
-          supportId: 'jvn-futuro',
-          otherSupportName: 'cool',
-        },
-        {
-          supportId: 'other',
-          otherSupportName: 'ayuda diaria',
-        },
-      ],
-    },
-    {
-      firstname: 'Bruno',
-      maternalLastname: 'Hiram',
-      curp: 'BR1N7327849',
-      accepted: 1,
-    },
-    {
-      firstname: 'Bruno',
-      maternalLastname: 'Hiram',
-      curp: 'BR1N7327849',
-      accepted: 1,
-    },
-    {
-      firstname: 'Jose Luis',
-      maternalLastname: 'Apellido1',
-      curp: 'JASO432536',
-      accepted: 1,
-    },
-  ];
+  citizens: Array<Citizen> = [ ];
 
   filterCitizen: Citizen = {
     firstname: '',
@@ -111,26 +68,46 @@ export class CitizenInfoComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private citizenInfoService: CitizenInfoService
+    private citizenInfoService: CitizenInfoService,
+    private httpClientService: HttpClient
   ) {}
 
   ngOnInit() {
+
+      //REQUEST TO RECEIVE CITIZENES!!!
+      const url = environment.API_URL + '/person';
+      this.httpClientService.get(url).subscribe(
+        (response: Array<any>) => {
+          console.log(response);
+          this.citizens = response;
+          this.dataSource = new MatTableDataSource<Citizen>(this.citizens);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.filterPredicate = this.customFilterPredicate();
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
+
+
     this.route.data.subscribe((data) => (this.states = data.states));
     this.initFormGroups();
 
-    //REQUEST TO RECEIVE CITIZENES!!!
-
+  
     //Request to receive social workers!!!!
 
-    this.socialWorkers = [
-      { id: '0', firstname: 'Juan Bazaldua Torres' },
-      { id: '1', firstname: 'Pablo Bazaldua ' },
-      { id: '2', firstname: 'Christian Torres' },
-    ];
+    let url2 = environment.API_URL + '/social_workers';
+    this.httpClientService.get(url2).subscribe(
+      (response: Array<any>) => {
+        console.log(response);
+        this.socialWorkers = response;
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
 
-    this.dataSource = new MatTableDataSource<Citizen>(this.citizens);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.filterPredicate = this.customFilterPredicate();
+    
 
     this.nameFilter.valueChanges.subscribe((nameFilterValue) => {
       this.filterCitizen['firstname'] = nameFilterValue;

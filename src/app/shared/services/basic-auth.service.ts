@@ -13,10 +13,19 @@ export class BasicAuthService implements HttpInterceptor {
     if (sessionStorage.getItem('username') && sessionStorage.getItem('token')) {
       req = req.clone({
         setHeaders: {
-          Authorization: sessionStorage.getItem('token')
+          Authorization: sessionStorage.getItem('token'),
+        // "Access-Control-Allow-Origin": "*",
+        // 'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+        // 'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
+
         }
       })
     }
+    //req.headers.delete("Content-Type", "application/json");
+
+
+    
+// console.log()
 
     return next.handle(req);
 
