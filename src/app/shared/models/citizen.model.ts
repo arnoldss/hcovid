@@ -21,4 +21,9 @@ export interface Citizen {
   email?: string;
   phoneNumber?: number;
   address?: Address;
+  user?: {
+    id?: string;
+role?: string;
+username?: string;
+  }
 }

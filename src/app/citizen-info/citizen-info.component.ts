@@ -52,43 +52,43 @@ export class CitizenInfoComponent implements OnInit {
   ];
   dataSource;
   citizens: Array<Citizen> = [
-    {
-      firstname: 'Arnoldo',
-      paternalLastname: 'Bazaldua',
-      maternalLastname: 'Cerda',
-      birthDate: new Date('01-07-1991'),
-      dependantQty: 3,
+    // {
+    //   firstname: 'Arnoldo',
+    //   paternalLastname: 'Bazaldua',
+    //   maternalLastname: 'Cerda',
+    //   birthDate: new Date('01-07-1991'),
+    //   dependantQty: 3,
 
-      curp: 'BAXA432536',
-      accepted: 1,
-      hasJob: true,
-      lastPaycheckQty: 4000,
-      birthStateId: 3,
-      isSingle: true,
-      hasOtherSupport: true,
-      govSupport: [
-        {
-          supportId: 'jvn-futuro',
-          otherSupportName: 'cool',
-        },
-        {
-          supportId: 'other',
-          otherSupportName: 'ayuda diaria',
-        },
-      ],
-    },
-    {
-      firstname: 'Bruno',
-      maternalLastname: 'García',
-      curp: 'AAGB970816HDFLRR32',
-      accepted: 1,
-    },
-    {
-      firstname: 'Jose Luis',
-      maternalLastname: 'Apellido1',
-      curp: 'JASO432536',
-      accepted: 1,
-    },
+    //   curp: 'BAXA432536',
+    //   accepted: 1,
+    //   hasJob: true,
+    //   lastPaycheckQty: 4000,
+    //   birthStateId: 3,
+    //   isSingle: true,
+    //   hasOtherSupport: true,
+    //   govSupport: [
+    //     {
+    //       supportId: 'jvn-futuro',
+    //       otherSupportName: 'cool',
+    //     },
+    //     {
+    //       supportId: 'other',
+    //       otherSupportName: 'ayuda diaria',
+    //     },
+    //   ],
+    // },
+    // {
+    //   firstname: 'Bruno',
+    //   maternalLastname: 'García',
+    //   curp: 'AAGB970816HDFLRR32',
+    //   accepted: 1,
+    // },
+    // {
+    //   firstname: 'Jose Luis',
+    //   maternalLastname: 'Apellido1',
+    //   curp: 'JASO432536',
+    //   accepted: 1,
+    // },
   ];
 
   filterCitizen: Citizen = {
@@ -116,35 +116,35 @@ export class CitizenInfoComponent implements OnInit {
 
   ngOnInit() {
     //REQUEST TO RECEIVE CITIZENES!!!
-    // const url = environment.API_URL + '/person';
-    // this.httpClientService.get(url).subscribe(
-    //   (response: Array<any>) => {
-    //     console.log(response);
-    //     this.citizens = response;
+    const url = environment.API_URL + '/person';
+    this.httpClientService.get(url).subscribe(
+      (response: Array<any>) => {
+        console.log(response);
+        this.citizens = response;
     this.dataSource = new MatTableDataSource<Citizen>(this.citizens);
     this.dataSource.paginator = this.paginator;
     this.dataSource.filterPredicate = this.customFilterPredicate();
-    //   },
-    //   (error) => {
-    //     console.error(error);
-    //   }
-    // );
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
 
     this.route.data.subscribe((data) => (this.states = data.states));
     this.initFormGroups();
 
     //Request to receive social workers!!!!
 
-    // let url2 = environment.API_URL + '/social_workers';
-    // this.httpClientService.get(url2).subscribe(
-    //   (response: Array<any>) => {
-    //     console.log(response);
-    //     this.socialWorkers = response;
-    //   },
-    //   (error) => {
-    //     console.error(error);
-    //   }
-    // );
+    let url2 = environment.API_URL + '/social_workers';
+    this.httpClientService.get(url2).subscribe(
+      (response: Array<any>) => {
+        console.log(response);
+        this.socialWorkers = response;
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
 
     this.nameFilter.valueChanges.subscribe((nameFilterValue) => {
       this.filterCitizen['firstname'] = nameFilterValue;
@@ -157,8 +157,14 @@ export class CitizenInfoComponent implements OnInit {
     });
 
     this.socialWorkerFC.valueChanges.subscribe((assignedSocialWorker) => {
-      console.log(assignedSocialWorker);
+
+
     });
+  }
+
+
+  changeD(c, event) {
+    console.log(c, event);
   }
 
   private initFormGroups() {

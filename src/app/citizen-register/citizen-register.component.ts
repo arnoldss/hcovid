@@ -11,9 +11,10 @@ import { Citizen } from '../shared/models/citizen.model';
 import { State } from '../shared/models/state.model';
 import { ActivatedRoute } from '@angular/router';
 import { isNullOrUndefined } from '../shared/helper-functions';
-import { switchMap, tap, filter } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+
+import { switchMap, tap, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-citizen-register',
@@ -30,15 +31,16 @@ export class CitizenRegisterComponent implements OnInit {
   ];
   states: State[] = [];
 
-  constructor(
-    private fb: FormBuilder,
-    private route: ActivatedRoute,
+  constructor(private fb: FormBuilder, private route: ActivatedRoute,
+    private httpClientService: HttpClient,
+    
     private http: HttpClient
-  ) {}
+    ) {}
 
   private _initForm() {
     this.form = this.fb.group(
       {
+        curp: [null, Validators.required],
         birthDate: [null, Validators.required],
         birthStateId: [null, Validators.required],
         dependantQty: [null, Validators.required],
@@ -176,9 +178,45 @@ export class CitizenRegisterComponent implements OnInit {
         (error) => console.error(error)
       );
     } else {
-      // POST to create new citizen
+      
+
+     let str =  new Date(value.birthDate) + ''.substring(0, 10);
+    let urlPerson = environment.API_URL + '/person';
+    this.httpClientService.post(urlPerson, 
+    {
+      //"id": "86",
+      "curp": value.curp + '',
+      "name": value.firstname + ' ' + value.maternalLastname + ' ',
+       "celularPhone": "POC",   
+      "dob": '01-01-1993',
+      "formalJob": value.hasJob + '',
+      "lastPayCheckIncome": value.lastPaycheckQty === null ? "0" : value.lastPaycheckQty + '',
+      "anotherGovernmentProgram": value.hasOtherSupport + '',
+      "single": value.isSingle + '',
+      "pension": "true",
+      "pensionAmount": "0",
+      "accountNumber": "0",
+      "clabe": "0",
+      "tarjeta": "0",
+      "bank": "test",
+      "userId": sessionStorage.getItem('userID')
+      }
+      ).subscribe(
+      (response) => {
+        console.log(response)
+
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+      }
+    
+
+
+
     }
-  }
+  
 
   pushGovSupportForm() {
     const form = this.fb.group(
