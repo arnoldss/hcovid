@@ -123,6 +123,7 @@
     <a
       mat-tab-link
       *ngFor="let tab of tabs"
+      [disabled]="tab.disabled"
       [routerLink]="[tab.routeName]"
       routerLinkActive
       #rla="routerLinkActive"
