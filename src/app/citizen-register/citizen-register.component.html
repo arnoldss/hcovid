@@ -132,11 +132,7 @@
     </ng-container>
 
     <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">
-      Registrar
-    </button>
-
-    <button mat-button color="primary" type="button" [routerLink]="['/sign-in']">
-      Volver
+      {{ editMode ? "Actualizar" : "Registrar" }}
     </button>
   </form>
 </div>

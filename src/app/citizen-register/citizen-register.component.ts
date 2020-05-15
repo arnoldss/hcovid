@@ -11,6 +11,9 @@ import { Citizen } from '../shared/models/citizen.model';
 import { State } from '../shared/models/state.model';
 import { ActivatedRoute } from '@angular/router';
 import { isNullOrUndefined } from '../shared/helper-functions';
+import { switchMap, tap, filter } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-citizen-register',
@@ -26,7 +29,11 @@ export class CitizenRegisterComponent implements OnInit {
   ];
   states: State[] = [];
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute) {}
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private http: HttpClient
+  ) {}
 
   private _initForm() {
     this.form = this.fb.group(
@@ -55,15 +62,32 @@ export class CitizenRegisterComponent implements OnInit {
 
   ngOnInit() {
     this._initForm();
-    this.route.params.subscribe((params) => {
-      const citizenId = params.citizenId;
-      if (!isNullOrUndefined(citizenId)) {
-        this.editMode = true;
-        console.log('Im editing!');
-        // GET request to retrieve citizen data
-        // patch forms value with citizen data once retrieved
-      }
-    });
+    this.route.params
+      .pipe(
+        filter((params) => !isNullOrUndefined(params.citizenId)),
+        switchMap((params) => {
+          const citizenId = params.citizenId;
+          this.editMode = true;
+          const url = environment.API_URL + '/personByCurp';
+          return this.http.get(url, { params: { curp: citizenId } });
+        })
+      )
+      .subscribe((response: any) => {
+        const value = {
+          birthDate: null,
+          birthStateId: null,
+          dependantQty: null,
+          firstname: response.name,
+          govSupport: [],
+          hasJob: response.formalJob ? 'true' : 'false',
+          hasOtherSupport: response.anotherGovernmentProgram ? 'true' : 'false',
+          isSingle: response.single ? 'true' : 'false',
+          maternalLastname: null,
+          lastPaycheckQty: null,
+          paternalLastname: null,
+        };
+        this.form.setValue(value);
+      });
     this.route.data.subscribe((data) => (this.states = data.states));
   }
 
@@ -112,6 +136,7 @@ export class CitizenRegisterComponent implements OnInit {
     console.log(citizen);
     if (this.editMode) {
       // PUT to update citizen
+      this.editMode = false;
     } else {
       // POST to create new citizen
     }
