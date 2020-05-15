@@ -157,8 +157,14 @@ export class CitizenInfoComponent implements OnInit {
     });
 
     this.socialWorkerFC.valueChanges.subscribe((assignedSocialWorker) => {
-      console.log(assignedSocialWorker);
+
+
     });
+  }
+
+
+  changeD(c, event) {
+    console.log(c, event);
   }
 
   private initFormGroups() {
