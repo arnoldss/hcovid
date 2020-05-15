@@ -18,8 +18,6 @@ import { isNullOrUndefined } from '../shared/helper-functions';
   styleUrls: ['citizen-register.component.scss'],
 })
 export class CitizenRegisterComponent implements OnInit {
-  @Input() citizen: Citizen;
-
   editMode: boolean = false;
   form: FormGroup;
   govSupportOptions = [
@@ -47,23 +45,6 @@ export class CitizenRegisterComponent implements OnInit {
       },
       { validators: [this.requiredPaycheckQty] }
     );
-    if (!isNullOrUndefined(this.citizen)) {
-      const value = {
-        birthDate: this.citizen.birthDate,
-        birthStateId: this.citizen.birthStateId,
-        dependantQty: this.citizen.dependantQty,
-        firstname: this.citizen.firstname,
-        govSupport: this.citizen.govSupport,
-        hasJob: this.citizen.hasJob,
-        hasOtherSupport: this.citizen.hasOtherSupport,
-        isSingle: this.citizen.isSingle,
-        maternalLastname: this.citizen.maternalLastname,
-        lastPaycheckQty: this.citizen.lastPaycheckQty,
-        paternalLastname: this.citizen.paternalLastname,
-      };
-      this.form.setValue(value);
-      this.editMode = true;
-    }
   }
 
   private _emptyGovSupportArray() {
@@ -74,6 +55,15 @@ export class CitizenRegisterComponent implements OnInit {
 
   ngOnInit() {
     this._initForm();
+    this.route.params.subscribe((params) => {
+      const citizenId = params.citizenId;
+      if (!isNullOrUndefined(citizenId)) {
+        this.editMode = true;
+        console.log('Im editing!');
+        // GET request to retrieve citizen data
+        // patch forms value with citizen data once retrieved
+      }
+    });
     this.route.data.subscribe((data) => (this.states = data.states));
   }
 
@@ -121,9 +111,9 @@ export class CitizenRegisterComponent implements OnInit {
     };
     console.log(citizen);
     if (this.editMode) {
-      // update citizen
+      // PUT to update citizen
     } else {
-      // create new citizen
+      // POST to create new citizen
     }
   }
 

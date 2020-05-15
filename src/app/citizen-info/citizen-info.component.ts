@@ -32,10 +32,14 @@ export class CitizenInfoComponent implements OnInit {
   socialWorkerFC = new FormControl();
   globalFilter = '';
   states: State[] = [];
-  tabs: { name: string; routeName: string }[] = [
-    { name: 'Registrar Ciudadano', routeName: 'register' },
-    { name: 'Editar Ciudadadano', routeName: 'edit' },
-    { name: 'Registrar Trabajador Social', routeName: 'register-social' },
+  tabs: { name: string; routeName: string; disabled: boolean }[] = [
+    { name: 'Registrar Ciudadano', routeName: 'register', disabled: false },
+    { name: 'Editar Ciudadadano', routeName: 'edit', disabled: true },
+    {
+      name: 'Registrar Trabajador Social',
+      routeName: 'register-social',
+      disabled: false,
+    },
   ];
 
   displayedColumns: string[] = [
@@ -47,7 +51,51 @@ export class CitizenInfoComponent implements OnInit {
     'edit',
   ];
   dataSource;
-  citizens: Array<Citizen> = [ ];
+  citizens: Array<Citizen> = [
+    {
+      firstname: 'Arnoldo',
+      paternalLastname: 'Bazaldua',
+      maternalLastname: 'Cerda',
+      birthDate: new Date('01-07-1991'),
+      dependantQty: 3,
+
+      curp: 'BAXA432536',
+      accepted: 1,
+      hasJob: true,
+      lastPaycheckQty: 4000,
+      birthStateId: 3,
+      isSingle: true,
+      hasOtherSupport: true,
+      govSupport: [
+        {
+          supportId: 'jvn-futuro',
+          otherSupportName: 'cool',
+        },
+        {
+          supportId: 'other',
+          otherSupportName: 'ayuda diaria',
+        },
+      ],
+    },
+    {
+      firstname: 'Bruno',
+      maternalLastname: 'Hiram',
+      curp: 'BR1N7327849',
+      accepted: 1,
+    },
+    {
+      firstname: 'Bruno',
+      maternalLastname: 'Hiram',
+      curp: 'BR1N7327849',
+      accepted: 1,
+    },
+    {
+      firstname: 'Jose Luis',
+      maternalLastname: 'Apellido1',
+      curp: 'JASO432536',
+      accepted: 1,
+    },
+  ];
 
   filterCitizen: Citizen = {
     firstname: '',
@@ -73,41 +121,36 @@ export class CitizenInfoComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-
-      //REQUEST TO RECEIVE CITIZENES!!!
-      const url = environment.API_URL + '/person';
-      this.httpClientService.get(url).subscribe(
-        (response: Array<any>) => {
-          console.log(response);
-          this.citizens = response;
-          this.dataSource = new MatTableDataSource<Citizen>(this.citizens);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.filterPredicate = this.customFilterPredicate();
-        },
-        (error) => {
-          console.error(error);
-        }
-      );
-
+    //REQUEST TO RECEIVE CITIZENES!!!
+    // const url = environment.API_URL + '/person';
+    // this.httpClientService.get(url).subscribe(
+    //   (response: Array<any>) => {
+    //     console.log(response);
+    //     this.citizens = response;
+    this.dataSource = new MatTableDataSource<Citizen>(this.citizens);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.filterPredicate = this.customFilterPredicate();
+    //   },
+    //   (error) => {
+    //     console.error(error);
+    //   }
+    // );
 
     this.route.data.subscribe((data) => (this.states = data.states));
     this.initFormGroups();
 
-  
     //Request to receive social workers!!!!
 
-    let url2 = environment.API_URL + '/social_workers';
-    this.httpClientService.get(url2).subscribe(
-      (response: Array<any>) => {
-        console.log(response);
-        this.socialWorkers = response;
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-
-    
+    // let url2 = environment.API_URL + '/social_workers';
+    // this.httpClientService.get(url2).subscribe(
+    //   (response: Array<any>) => {
+    //     console.log(response);
+    //     this.socialWorkers = response;
+    //   },
+    //   (error) => {
+    //     console.error(error);
+    //   }
+    // );
 
     this.nameFilter.valueChanges.subscribe((nameFilterValue) => {
       this.filterCitizen['firstname'] = nameFilterValue;
@@ -189,37 +232,7 @@ export class CitizenInfoComponent implements OnInit {
   /////// stuff for edit
 
   onEditCitizen(citizen: Citizen) {
-    console.log(citizen);
     this.router.navigate(['edit', citizen.curp], { relativeTo: this.route });
-    // this.selected = 1;
-    // console.log(citizen);
-    // console.log(this.selected);
-    // this.formEdit.get('govSupport').setValue([]);
-    // this.formEdit.reset();
-    // this.editCitizen = citizen;
-    // this.formEdit.get('firstname').setValue(citizen.firstname);
-    // this.formEdit.get('paternalLastname').setValue(citizen.paternalLastname);
-    // this.formEdit.get('maternalLastname').setValue(citizen.maternalLastname);
-    // this.formEdit.get('birthDate').setValue(citizen.birthDate);
-    // this.formEdit.get('birthStateId').setValue(citizen.birthStateId);
-    // this.formEdit.get('hasJob').setValue(citizen.hasJob + '');
-    // if (citizen.hasJob)
-    //   this.formEdit.get('lastPaycheckQty').setValue(citizen.lastPaycheckQty);
-    // this.formEdit.get('dependantQty').setValue(citizen.dependantQty);
-    // this.formEdit.get('isSingle').setValue(citizen.isSingle + '');
-    // this.formEdit.get('hasOtherSupport').setValue(citizen.hasOtherSupport + '');
-    // if (citizen.hasOtherSupport) {
-    //   citizen.govSupport.forEach((v: GovernmentSupport) => {
-    //     const form = this.fb.group(
-    //       {
-    //         supportType: v.supportId,
-    //         otherSupportName: v.otherSupportName,
-    //       },
-    //       { validators: [this.requiredOtherSupportName] }
-    //     );
-    //     this.getGovSupportArray().push(form);
-    //   });
-    // }
   }
 
   requiredPaycheckQty(form: FormGroup): ValidationErrors {
