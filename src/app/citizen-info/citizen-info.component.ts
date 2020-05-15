@@ -79,14 +79,8 @@ export class CitizenInfoComponent implements OnInit {
     },
     {
       firstname: 'Bruno',
-      maternalLastname: 'Hiram',
-      curp: 'BR1N7327849',
-      accepted: 1,
-    },
-    {
-      firstname: 'Bruno',
-      maternalLastname: 'Hiram',
-      curp: 'BR1N7327849',
+      maternalLastname: 'García',
+      curp: 'AAGB970816HDFLRR32',
       accepted: 1,
     },
     {
@@ -228,8 +222,6 @@ export class CitizenInfoComponent implements OnInit {
     console.log(this.filterCitizen);
     this.dataSource.filter = JSON.stringify(this.filterCitizen);
   }
-
-  /////// stuff for edit
 
   onEditCitizen(citizen: Citizen) {
     this.router.navigate(['edit', citizen.curp], { relativeTo: this.route });
