@@ -2,6 +2,7 @@ import { GovernmentSupport } from './gov-support.model';
 import { Address } from './address.model';
 
 export interface Citizen {
+  id?: number;
   birthDate?: Date;
   birthStateId?: number;
   dependantQty?: number;

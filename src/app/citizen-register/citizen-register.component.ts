@@ -22,6 +22,7 @@ import { environment } from 'src/environments/environment';
 })
 export class CitizenRegisterComponent implements OnInit {
   editMode: boolean = false;
+  editCitizenId: number;
   form: FormGroup;
   govSupportOptions = [
     { value: 'jvn-futuro', label: 'Jóvenes por un Futuro' },
@@ -67,7 +68,6 @@ export class CitizenRegisterComponent implements OnInit {
         filter((params) => !isNullOrUndefined(params.citizenId)),
         switchMap((params) => {
           const citizenId = params.citizenId;
-          this.editMode = true;
           const url = environment.API_URL + '/personByCurp';
           return this.http.get(url, { params: { curp: citizenId } });
         })
@@ -86,6 +86,8 @@ export class CitizenRegisterComponent implements OnInit {
           lastPaycheckQty: null,
           paternalLastname: null,
         };
+        this.editMode = true;
+        this.editCitizenId = response.id;
         this.form.setValue(value);
       });
     this.route.data.subscribe((data) => (this.states = data.states));
@@ -134,9 +136,45 @@ export class CitizenRegisterComponent implements OnInit {
       paternalLastname: value.paternalLastname,
     };
     console.log(citizen);
+    const url = environment.API_URL + '/person';
     if (this.editMode) {
-      // PUT to update citizen
-      this.editMode = false;
+      const day =
+        citizen.birthDate.getDate() < 10
+          ? `0${citizen.birthDate.getDate()}`
+          : citizen.birthDate.getDate();
+      const month =
+        citizen.birthDate.getMonth() + 1 < 10
+          ? `0${citizen.birthDate.getMonth() + 1}`
+          : citizen.birthDate.getMonth() + 1;
+      const year = citizen.birthDate.getFullYear();
+      const dob = `${year}-${month}-${day}`;
+      console.log(dob);
+      const body = {
+        id: this.editCitizenId,
+        curp: 'hardcodedCURP',
+        name: citizen.firstname,
+        celularPhone: '0000000000',
+        dob,
+        formalJob: citizen.hasJob ? 'true' : 'false',
+        lastPayCheckIncome: citizen.lastPaycheckQty,
+        anotherGovernmentProgram: citizen.hasOtherSupport ? 'true' : 'false',
+        single: citizen.isSingle ? 'true' : 'false',
+        pension: 'false',
+        pensionAmount: '0',
+        accountNumber: '12',
+        clabe: '12',
+        tarjeta: '12',
+        bank: 'test',
+        userId: '1',
+      };
+      this.http.patch(url, body).subscribe(
+        (response) => {
+          console.log(response);
+          this.editCitizenId = null;
+          this.editMode = false;
+        },
+        (error) => console.error(error)
+      );
     } else {
       // POST to create new citizen
     }
