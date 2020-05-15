@@ -52,8 +52,8 @@ export class CitizenInfoComponent implements OnInit {
   ];
   dataSource;
   citizens: Array<Citizen> = [];
-  filterCitizen: Citizen = {
-    firstname: '',
+  filterCitizen = {
+    name: '',
     curp: '',
   };
   editEmployee: any;
@@ -105,7 +105,7 @@ export class CitizenInfoComponent implements OnInit {
     );
 
     this.nameFilter.valueChanges.subscribe((nameFilterValue) => {
-      this.filterCitizen['firstname'] = nameFilterValue;
+      this.filterCitizen['name'] = nameFilterValue;
       this.dataSource.filter = JSON.stringify(this.filterCitizen);
     });
 
@@ -159,7 +159,7 @@ export class CitizenInfoComponent implements OnInit {
       if (this.globalFilter) {
         // search all text fields
         globalMatch =
-          data.firstname
+          data.name
             .toString()
             .trim()
             .toLowerCase()
@@ -173,11 +173,11 @@ export class CitizenInfoComponent implements OnInit {
       let searchString = JSON.parse(filter);
       return (
         data.curp.toString().trim().indexOf(searchString.curp) !== -1 &&
-        data.firstname
+        data.name
           .toString()
           .trim()
           .toLowerCase()
-          .indexOf(searchString.firstname.toLowerCase()) !== -1
+          .indexOf(searchString.name.toLowerCase()) !== -1
       );
     };
     return myFilterPredicate;
@@ -281,10 +281,15 @@ export class CitizenInfoComponent implements OnInit {
   //   buttons handlers changing tab stuff
 
   onCitizenAccept(element) {
+    console.log(element);
+    alert("Se enviara apoyo al ciudadano");
     // REQUEST TO ACCEPT SUPPORT TO CITIZEN
   }
 
   onAssignSocialWorker(element) {
     console.log(element);
+    alert("Se asigno nuevo trabajador social");
+        // REQUEST TO ASSIGN SOCIAL WORKER
+
   }
 }
