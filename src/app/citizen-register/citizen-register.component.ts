@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -10,13 +10,17 @@ import { MatRadioChange } from '@angular/material/radio';
 import { Citizen } from '../shared/models/citizen.model';
 import { State } from '../shared/models/state.model';
 import { ActivatedRoute } from '@angular/router';
+import { isNullOrUndefined } from '../shared/helper-functions';
 
 @Component({
   selector: 'app-citizen-register',
   templateUrl: 'citizen-register.component.html',
   styleUrls: ['citizen-register.component.scss'],
 })
-export class CitizenRegisterComponent implements OnInit, OnDestroy {
+export class CitizenRegisterComponent implements OnInit {
+  @Input() citizen: Citizen;
+
+  editMode: boolean = false;
   form: FormGroup;
   govSupportOptions = [
     { value: 'jvn-futuro', label: 'Jóvenes por un Futuro' },
@@ -26,13 +30,7 @@ export class CitizenRegisterComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute) {}
 
-  private _emptyGovSupportArray() {
-    this.getGovSupportArray().controls.forEach((control) =>
-      this.getGovSupportArray().removeAt(0)
-    );
-  }
-
-  ngOnInit() {
+  private _initForm() {
     this.form = this.fb.group(
       {
         birthDate: [null, Validators.required],
@@ -49,11 +47,34 @@ export class CitizenRegisterComponent implements OnInit, OnDestroy {
       },
       { validators: [this.requiredPaycheckQty] }
     );
-    this.route.data.subscribe((data) => (this.states = data.states));
+    if (!isNullOrUndefined(this.citizen)) {
+      const value = {
+        birthDate: this.citizen.birthDate,
+        birthStateId: this.citizen.birthStateId,
+        dependantQty: this.citizen.dependantQty,
+        firstname: this.citizen.firstname,
+        govSupport: this.citizen.govSupport,
+        hasJob: this.citizen.hasJob,
+        hasOtherSupport: this.citizen.hasOtherSupport,
+        isSingle: this.citizen.isSingle,
+        maternalLastname: this.citizen.maternalLastname,
+        lastPaycheckQty: this.citizen.lastPaycheckQty,
+        paternalLastname: this.citizen.paternalLastname,
+      };
+      this.form.setValue(value);
+      this.editMode = true;
+    }
   }
 
-  ngOnDestroy() {
-    this.form.reset();
+  private _emptyGovSupportArray() {
+    this.getGovSupportArray().controls.forEach((control) =>
+      this.getGovSupportArray().removeAt(0)
+    );
+  }
+
+  ngOnInit() {
+    this._initForm();
+    this.route.data.subscribe((data) => (this.states = data.states));
   }
 
   deleteSupport(index: number) {
@@ -99,6 +120,11 @@ export class CitizenRegisterComponent implements OnInit, OnDestroy {
       paternalLastname: value.paternalLastname,
     };
     console.log(citizen);
+    if (this.editMode) {
+      // update citizen
+    } else {
+      // create new citizen
+    }
   }
 
   pushGovSupportForm() {

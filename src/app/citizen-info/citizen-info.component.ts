@@ -31,7 +31,12 @@ export class CitizenInfoComponent implements OnInit {
   nameFilter = new FormControl();
   socialWorkerFC = new FormControl();
   globalFilter = '';
-  selected = 0;
+  states: State[] = [];
+  tabs: { name: string; routeName: string }[] = [
+    { name: 'Registrar Ciudadano', routeName: 'register' },
+    { name: 'Editar Ciudadadano', routeName: 'edit' },
+    { name: 'Registrar Trabajador Social', routeName: 'register-social' },
+  ];
 
   displayedColumns: string[] = [
     'nombre',
@@ -39,6 +44,7 @@ export class CitizenInfoComponent implements OnInit {
     'estatus',
     'accept',
     'socialWorker',
+    'edit',
   ];
   dataSource;
   citizens: Array<Citizen> = [ ];
@@ -50,14 +56,6 @@ export class CitizenInfoComponent implements OnInit {
 
   editEmployee: any;
 
-  //edit stuff variables
-
-  states: State[] = [];
-
-  govSupportOptions = [
-    { value: 'jvn-futuro', label: 'Jóvenes por un Futuro' },
-    { value: 'adt-mayores', label: 'Adultos Mayores' },
-  ];
   formEdit: FormGroup;
   editCitizen: any;
 
@@ -190,36 +188,38 @@ export class CitizenInfoComponent implements OnInit {
 
   /////// stuff for edit
 
-  selectCitizen(citizen) {
-    this.selected = 1;
+  onEditCitizen(citizen: Citizen) {
     console.log(citizen);
-    console.log(this.selected);
-    this.formEdit.get('govSupport').setValue([]);
-    this.formEdit.reset();
-    this.editCitizen = citizen;
-    this.formEdit.get('firstname').setValue(citizen.firstname);
-    this.formEdit.get('paternalLastname').setValue(citizen.paternalLastname);
-    this.formEdit.get('maternalLastname').setValue(citizen.maternalLastname);
-    this.formEdit.get('birthDate').setValue(citizen.birthDate);
-    this.formEdit.get('birthStateId').setValue(citizen.birthStateId);
-    this.formEdit.get('hasJob').setValue(citizen.hasJob + '');
-    if (citizen.hasJob)
-      this.formEdit.get('lastPaycheckQty').setValue(citizen.lastPaycheckQty);
-    this.formEdit.get('dependantQty').setValue(citizen.dependantQty);
-    this.formEdit.get('isSingle').setValue(citizen.isSingle + '');
-    this.formEdit.get('hasOtherSupport').setValue(citizen.hasOtherSupport + '');
-    if (citizen.hasOtherSupport) {
-      citizen.govSupport.forEach((v: GovernmentSupport) => {
-        const form = this.fb.group(
-          {
-            supportType: v.supportId,
-            otherSupportName: v.otherSupportName,
-          },
-          { validators: [this.requiredOtherSupportName] }
-        );
-        this.getGovSupportArray().push(form);
-      });
-    }
+    this.router.navigate(['edit', citizen.curp], { relativeTo: this.route });
+    // this.selected = 1;
+    // console.log(citizen);
+    // console.log(this.selected);
+    // this.formEdit.get('govSupport').setValue([]);
+    // this.formEdit.reset();
+    // this.editCitizen = citizen;
+    // this.formEdit.get('firstname').setValue(citizen.firstname);
+    // this.formEdit.get('paternalLastname').setValue(citizen.paternalLastname);
+    // this.formEdit.get('maternalLastname').setValue(citizen.maternalLastname);
+    // this.formEdit.get('birthDate').setValue(citizen.birthDate);
+    // this.formEdit.get('birthStateId').setValue(citizen.birthStateId);
+    // this.formEdit.get('hasJob').setValue(citizen.hasJob + '');
+    // if (citizen.hasJob)
+    //   this.formEdit.get('lastPaycheckQty').setValue(citizen.lastPaycheckQty);
+    // this.formEdit.get('dependantQty').setValue(citizen.dependantQty);
+    // this.formEdit.get('isSingle').setValue(citizen.isSingle + '');
+    // this.formEdit.get('hasOtherSupport').setValue(citizen.hasOtherSupport + '');
+    // if (citizen.hasOtherSupport) {
+    //   citizen.govSupport.forEach((v: GovernmentSupport) => {
+    //     const form = this.fb.group(
+    //       {
+    //         supportType: v.supportId,
+    //         otherSupportName: v.otherSupportName,
+    //       },
+    //       { validators: [this.requiredOtherSupportName] }
+    //     );
+    //     this.getGovSupportArray().push(form);
+    //   });
+    // }
   }
 
   requiredPaycheckQty(form: FormGroup): ValidationErrors {
@@ -315,9 +315,5 @@ export class CitizenInfoComponent implements OnInit {
 
   onAssignSocialWorker(element) {
     console.log(element);
-  }
-
-  changeTab(i) {
-    this.selected = i;
   }
 }

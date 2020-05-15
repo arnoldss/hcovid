@@ -13,7 +13,24 @@ const routes: Routes = [
   {
     path: 'citizen-info',
     component: CitizenInfoComponent,
-    resolve: { states: StateResolver },
+    children: [
+      {
+        path: 'register',
+        component: CitizenRegisterComponent,
+        resolve: { states: StateResolver },
+      },
+      {
+        path: 'edit',
+        children: [
+          {
+            path: ':citizenId',
+            component: CitizenRegisterComponent,
+            resolve: { states: StateResolver },
+          },
+        ],
+      },
+      { path: 'register-social', component: SocialWorkerRegisterComponent },
+    ],
     //canActivate:[AuthGuardService]
   },
   {
